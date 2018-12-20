@@ -81,6 +81,11 @@ public class Planet {
 		this.yyPos = this.yyPos + time * this.yyVel;
 	}
 
+	public void draw() {
+		StdDraw.picture(xxPos, yyPos, imgFileName);
+	}
+
+	/** use for test
 	public static void main(String[] args) {
 		Planet samh = new Planet(1, 0, 0, 0, 10, "samh");
 		Planet aegir = new Planet(3, 3, 0, 0, 5, "aegir");
@@ -92,6 +97,7 @@ public class Planet {
 		double netForceY = samh.calcNetForceExertedByY(allPlanets);
 		System.out.println(netForceY);
 	}
+	*/
 }
 
 
