@@ -1,4 +1,4 @@
-public class NBody{
+public class NBodyExtreme{
 	public static double readRadius(String path) {
 		In in = new In(path);
 		int planetCount = in.readInt();
@@ -6,11 +6,11 @@ public class NBody{
 		return radius;
 	}
 
-	public static Planet[] readPlanets(String path) {
+	public static PlanetExtreme[] readPlanets(String path) {
 		In in = new In(path);
 		int planetCount = in.readInt();
 		double radius = in.readDouble();
-		Planet[] planets = new Planet[planetCount];
+		PlanetExtreme[] planets = new PlanetExtreme[planetCount];
 		for(int i = 0; i < planetCount; i ++) {
 			double xP = in.readDouble();
 			double yP = in.readDouble();
@@ -19,7 +19,7 @@ public class NBody{
 			double m = in.readDouble();
 			String img = in.readString();
 
-			Planet p = new Planet(xP, yP, xV, yV, m, img);
+			PlanetExtreme p = new PlanetExtreme(xP, yP, xV, yV, m, img);
 			planets[i] = p;
 		}
 		return planets;
@@ -29,7 +29,7 @@ public class NBody{
 		double T = Double.parseDouble(args[0]);
 		double dt = Double.parseDouble(args[1]);
 		String filename = args[2];
-		Planet[] planets = readPlanets(filename); // read config file to create planets array
+		PlanetExtreme[] planets = readPlanets(filename); // read config file to create planets array
 
 		double radius = readRadius(filename);
 		StdDraw.setXscale(-1 * radius, radius);
@@ -41,6 +41,9 @@ public class NBody{
 		double[] netForceX = new double[planets.length];
 		double[] netForceY = new double[planets.length];
 
+		double[] newVelX = new double[planets.length];
+		double[] newVelY = new double[planets.length];
+
 		// StdAudio.play("audio/2001.mid");
 
 		while(time < T) {
@@ -49,10 +52,21 @@ public class NBody{
 				netForceY[i] = planets[i].calcNetForceExertedByY(planets);
 			}
 
+			//check for collision
+			for(int k = 0; k < planets.length; k ++ ) {
+				newVelX[k] = planets[k].calcCollisionVelX(planets);
+				newVelY[k] = planets[k].calcCollisionVelY(planets);
+			}
+
+
 			StdDraw.picture(0, 0, "images/starfield.jpg");
 			for(int j = 0; j < planets.length; j ++ ) {
-				Planet p = planets[j];
+				PlanetExtreme p = planets[j];
+				p.xxVel = newVelX[j];
+				p.yyVel = newVelY[j];
+				// System.out.println("Vol after " + p.xxVel);
 				p.update(dt,netForceX[j], netForceY[j]);
+				// System.out.println("Vol update to " + p.xxVel);
 				StdDraw.picture(p.xxPos, p.yyPos, "images/" + p.imgFileName);
 			}
 			
