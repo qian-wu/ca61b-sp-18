@@ -230,5 +230,10 @@ public class IntList {
         out.format(")");
         return out.toString();
     }
+
+    public static void main(String[] args) {
+        IntList origL = IntList.of(1, 2, 3);
+    IntList t = squareListRecursive(origL);
+}
 }
 
