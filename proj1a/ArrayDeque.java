@@ -1,7 +1,7 @@
 import java.lang.reflect.Array;
 
-public class ArrayDeque {
-    private int[] item;
+public class ArrayDeque<Labor> {
+    private Labor[] item;
     private int nextFirst;
     private int nextLast;
     private int size;
@@ -9,7 +9,7 @@ public class ArrayDeque {
     private static double LOWER_CAP = 0.25;
 
     public ArrayDeque() {
-        item = new int[MAX_SIZE];
+        item = (Labor[])new Object[MAX_SIZE];
         nextFirst = 0;
         nextLast = 1;
     }
@@ -30,7 +30,7 @@ public class ArrayDeque {
     }
 
     private void resize(int capasity) {
-        int[] tmp = new int[MAX_SIZE + capasity];
+        Labor[] tmp = (Labor[]) new Object[MAX_SIZE + capasity];
         for(int i = 0; i < size; i ++ ) {
             tmp[i] = get(i);
         }
@@ -42,7 +42,7 @@ public class ArrayDeque {
         this.nextLast = size;
     }
 
-    public void addFirst(int item) {
+    public void addFirst(Labor item) {
         if(nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
@@ -51,7 +51,7 @@ public class ArrayDeque {
         size += 1;
     }
 
-    public void addLast(int item) {
+    public void addLast(Labor item) {
         if(nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
@@ -72,7 +72,7 @@ public class ArrayDeque {
     }
 
     private void shrunk() {
-        int[] tmp = new int[MAX_SIZE / 2];
+        Labor[] tmp = (Labor[])new Object[MAX_SIZE / 2];
         for(int i = 0; i < size; i ++ ) {
             tmp[i] = get(i);
         }
@@ -94,24 +94,24 @@ public class ArrayDeque {
         }
     }
 
-    public int removeFirst() {
+    public Labor removeFirst() {
         if(isLowCapisity()) {
             shrunk();
         }
         nextFirst = getNext(nextFirst + 1);
-        int item = this.item[nextFirst];
-        this.item[nextFirst] = 0;
+        Labor item = this.item[nextFirst];
+        this.item[nextFirst] = null;
         size -= 1;
         return item;
     }
 
-    public int removeLast() {
+    public Labor removeLast() {
         if(isLowCapisity()) {
             shrunk();
         }
         nextLast = getNext(nextLast - 1);
-        int item = this.item[nextLast];
-        this.item[nextLast] = 0;
+        Labor item = this.item[nextLast];
+        this.item[nextLast] = null;
         size -= 1;
         return item;
     }
@@ -123,23 +123,23 @@ public class ArrayDeque {
         return false;
     }
 
-    public int get(int index) {
+    public Labor get(int index) {
         index = (index + nextFirst + 1) % MAX_SIZE;
         return this.item[index];
     }
 
     public static void main(String[] args) {
-        ArrayDeque a = new ArrayDeque();
-        a.addFirst(2);
-        a.addFirst(1);
-        a.addLast(3);
-        a.addLast(4);
-        a.addLast(5);
-        a.addLast(6);
-        a.addLast(7);
-        a.addLast(8);
-        a.addLast(9);
-        a.addLast(10);
+        ArrayDeque<String> a = new ArrayDeque<String>();
+        a.addFirst("2");
+        a.addFirst("1");
+        a.addLast("3");
+        a.addLast("4");
+        a.addLast("5");
+        a.addLast("6");
+        a.addLast("7");
+        a.addLast("8");
+        a.addLast("9");
+        a.addLast("10");
 
         a.removeLast();
         a.removeLast();
