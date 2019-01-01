@@ -1,17 +1,17 @@
 
-public class LinkedListDeque<Labor> {
-    private class IntNode{
-        private Labor item;
+public class LinkedListDeque<T> {
+    private class IntNode {
+        private T item;
         private IntNode next;
         private IntNode prev;
 
-        public IntNode(Labor x, IntNode prev, IntNode next) {
+        public IntNode(T x, IntNode prev, IntNode next) {
             item = x;
             this.prev = prev;
             this.next = next;
         }
 
-        public IntNode(Labor x) {
+        public IntNode(T x) {
             item = x;
         }
     }
@@ -25,25 +25,27 @@ public class LinkedListDeque<Labor> {
     }
 
     /** Add item at the first of LinkListDeque. */
-    public void addFirst(Labor x) {
+    public void addFirst(T x) {
         IntNode newNode = new IntNode(x, sentinal, sentinal.next);
         sentinal.next = newNode;
         newNode.next.prev = newNode;
         size += 1;
     }
 
-    public void addLast(Labor x) {
+    public void addLast(T x) {
         IntNode newNode = new IntNode(x, sentinal.prev, sentinal);
         sentinal.prev = newNode;
         newNode.prev.next = newNode;
         size += 1;
     }
 
-    public Labor removeFirst() {
-        if(this.isEmpty()) return null;
+    public T removeFirst() {
+        if (this.isEmpty()) {
+            return null;
+        }
 
         IntNode p = sentinal.next;
-        Labor item = p.item;
+        T item = p.item;
 
         sentinal.next = p.next;
         p.next.prev = sentinal;
@@ -54,11 +56,13 @@ public class LinkedListDeque<Labor> {
         return item;
     }
 
-    public Labor removeLast() {
-        if(this.isEmpty()) return null;
+    public T removeLast() {
+        if (this.isEmpty()) {
+            return null;
+        }
 
         IntNode p = sentinal.prev;
-        Labor item = p.item;
+        T item = p.item;
 
         sentinal.prev = p.prev;
         p.prev.next = sentinal;
@@ -75,9 +79,9 @@ public class LinkedListDeque<Labor> {
     }
 
     public boolean isEmpty() {
-        if(sentinal.prev.equals(sentinal)) {
+        if (sentinal.prev.equals(sentinal)) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -91,25 +95,25 @@ public class LinkedListDeque<Labor> {
         System.out.println();
     }
 
-    public Labor get(int index) {
+    public T get(int index) {
         if(this.isEmpty()) return null;
 
         IntNode p = sentinal.next;
-        while(index > 0) {
+        while (index > 0) {
             p = p.next;
             index -= 1;
         }
         return p.item;
     }
 
-    public Labor getRecursive(IntNode p, int index) {
-        if(index == 0) {
+    public T getRecursive(IntNode p, int index) {
+        if (index == 0) {
             return p.item;
         }
         return getRecursive(p.next, index - 1);
     }
 
-    public Labor getRecursive(int index) {
+    public T getRecursive(int index) {
         return getRecursive(sentinal.next, index);
     }
 

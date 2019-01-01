@@ -1,7 +1,5 @@
 import org.junit.Test;
 
-import java.lang.reflect.Array;
-
 import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
@@ -36,9 +34,9 @@ public class ArrayDequeTest {
     public void testAddLast() {
         ArrayDeque a = new ArrayDeque();
         int i = 1;
-        while(i < 8) {
+        while (i < 8) {
             a.addLast(i);
-            i ++;
+            i++;
         }
         assertEquals(1, a.get(0));
         assertEquals(7, a.get(6));

@@ -1,7 +1,7 @@
-import java.lang.reflect.Array;
 
-public class ArrayDeque<Labor> {
-    private Labor[] item;
+
+public class ArrayDeque<T> {
+    private T[] item;
     private int nextFirst;
     private int nextLast;
     private int size;
@@ -9,13 +9,13 @@ public class ArrayDeque<Labor> {
     private static double LOWER_CAP = 0.25;
 
     public ArrayDeque() {
-        item = (Labor[])new Object[MAX_SIZE];
+        item = (T[]) new Object[MAX_SIZE];
         nextFirst = 0;
         nextLast = 1;
     }
 
     private int getNext(int index) {
-        if(index < 0) {
+        if (index < 0) {
             return index + MAX_SIZE;
         }
         return index % MAX_SIZE;
@@ -30,8 +30,8 @@ public class ArrayDeque<Labor> {
     }
 
     private void resize(int capasity) {
-        Labor[] tmp = (Labor[]) new Object[MAX_SIZE + capasity];
-        for(int i = 0; i < size; i ++ ) {
+        T[] tmp = (T[]) new Object[MAX_SIZE + capasity];
+        for (int i = 0; i < size; i++) {
             tmp[i] = get(i);
         }
 
@@ -42,7 +42,7 @@ public class ArrayDeque<Labor> {
         this.nextLast = size;
     }
 
-    public void addFirst(Labor item) {
+    public void addFirst(T item) {
         if(nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
@@ -51,7 +51,7 @@ public class ArrayDeque<Labor> {
         size += 1;
     }
 
-    public void addLast(Labor item) {
+    public void addLast(T item) {
         if(nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
@@ -65,14 +65,14 @@ public class ArrayDeque<Labor> {
     }
 
     public void printDeque() {
-        for(int i = 0; i < size; i ++ ) {
+        for (int i = 0; i < size; i++) {
             System.out.print(this.get(i) + " ");
         }
         System.out.println();
     }
 
     private void shrunk() {
-        Labor[] tmp = (Labor[])new Object[MAX_SIZE / 2];
+        T[] tmp = (T[]) new Object[MAX_SIZE / 2];
         for(int i = 0; i < size; i ++ ) {
             tmp[i] = get(i);
         }
@@ -85,45 +85,45 @@ public class ArrayDeque<Labor> {
     }
 
     private boolean isLowCapisity() {
-        double percUsed = (double)size / (double)MAX_SIZE;
-        if(percUsed < LOWER_CAP){
+        double percUsed = (double) size / (double) MAX_SIZE;
+        if (percUsed < LOWER_CAP) {
             System.out.println("Yes is low");
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public Labor removeFirst() {
-        if(isLowCapisity()) {
+    public T removeFirst() {
+        if (isLowCapisity()) {
             shrunk();
         }
         nextFirst = getNext(nextFirst + 1);
-        Labor item = this.item[nextFirst];
+        T result = this.item[nextFirst];
         this.item[nextFirst] = null;
         size -= 1;
-        return item;
+        return result;
     }
 
-    public Labor removeLast() {
-        if(isLowCapisity()) {
+    public T removeLast() {
+        if (isLowCapisity()) {
             shrunk();
         }
         nextLast = getNext(nextLast - 1);
-        Labor item = this.item[nextLast];
+        T result = this.item[nextLast];
         this.item[nextLast] = null;
         size -= 1;
-        return item;
+        return result;
     }
 
     public boolean isEmpty() {
-        if(item.length == 0) {
+        if (item.length == 0) {
             return true;
         }
         return false;
     }
 
-    public Labor get(int index) {
+    public T get(int index) {
         index = (index + nextFirst + 1) % MAX_SIZE;
         return this.item[index];
     }
