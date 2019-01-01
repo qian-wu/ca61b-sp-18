@@ -44,7 +44,7 @@ public class ArrayDeque<T> {
 
     public void addFirst(T x) {
         if (nextFirst == nextLast) {
-            resize(10);
+            resize(MAX_SIZE);
         }
         this.item[nextFirst] = x;
         nextFirst = getNextFirst(nextFirst);
@@ -53,7 +53,7 @@ public class ArrayDeque<T> {
 
     public void addLast(T x) {
         if (nextFirst == nextLast) {
-            resize(10);
+            resize(MAX_SIZE);
         }
         this.item[nextLast] = x;
         nextLast = getNextLast(nextLast);
@@ -85,8 +85,12 @@ public class ArrayDeque<T> {
     }
 
     private boolean isLowCapisity() {
-        double percUsed = (double) size / (double) MAX_SIZE;
-        return percUsed < LOWER_CAP;
+        if (this.item.length > 16) {
+            double percUsed = (double) size / (double) MAX_SIZE;
+            return percUsed < LOWER_CAP;
+        } else {
+            return false;
+        }
     }
 
     public T removeFirst() {
@@ -133,7 +137,7 @@ public class ArrayDeque<T> {
 //        }
 //        System.out.println(a.size());
 //
-//        for (int i = 0; i < 50; i++) {
+//        for (int i = 0; i < 50 - 1; i++) {
 //            a.removeLast();
 //        }
 //        System.out.println(a.size());
