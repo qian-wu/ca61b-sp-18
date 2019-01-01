@@ -21,11 +21,11 @@ public class ArrayDeque<T> {
         return index % MAX_SIZE;
     }
 
-    public int getNextFirst(int index) {
+    private int getNextFirst(int index) {
         return getNext(index - 1);
     }
 
-    public int getNextLast(int index) {
+    private int getNextLast(int index) {
         return getNext(index + 1);
     }
 
@@ -42,20 +42,20 @@ public class ArrayDeque<T> {
         this.nextLast = size;
     }
 
-    public void addFirst(T item) {
-        if(nextFirst == nextLast) {
+    public void addFirst(T x) {
+        if (nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
-        this.item[nextFirst] = item;
+        this.item[nextFirst] = x;
         nextFirst = getNextFirst(nextFirst);
         size += 1;
     }
 
-    public void addLast(T item) {
-        if(nextFirst == nextLast) {
+    public void addLast(T x) {
+        if (nextFirst == nextLast) {
             resize(MAX_SIZE);
         }
-        this.item[nextLast] = item;
+        this.item[nextLast] = x;
         nextLast = getNextLast(nextLast);
         size += 1;
     }
@@ -73,7 +73,7 @@ public class ArrayDeque<T> {
 
     private void shrunk() {
         T[] tmp = (T[]) new Object[MAX_SIZE / 2];
-        for(int i = 0; i < size; i ++ ) {
+        for (int i = 0; i < size; i++) {
             tmp[i] = get(i);
         }
 
@@ -128,28 +128,28 @@ public class ArrayDeque<T> {
         return this.item[index];
     }
 
-    public static void main(String[] args) {
-        ArrayDeque<String> a = new ArrayDeque<String>();
-        a.addFirst("2");
-        a.addFirst("1");
-        a.addLast("3");
-        a.addLast("4");
-        a.addLast("5");
-        a.addLast("6");
-        a.addLast("7");
-        a.addLast("8");
-        a.addLast("9");
-        a.addLast("10");
-
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-        a.removeLast();
-
-        System.out.println(a.size());
-        a.printDeque();
-    }
+//    public static void main(String[] args) {
+//        ArrayDeque<String> a = new ArrayDeque<String>();
+//        a.addFirst("2");
+//        a.addFirst("1");
+//        a.addLast("3");
+//        a.addLast("4");
+//        a.addLast("5");
+//        a.addLast("6");
+//        a.addLast("7");
+//        a.addLast("8");
+//        a.addLast("9");
+//        a.addLast("10");
+//
+//        a.removeLast();
+//        a.removeLast();
+//        a.removeLast();
+//        a.removeLast();
+//        a.removeLast();
+//        a.removeLast();
+//        a.removeLast();
+//
+//        System.out.println(a.size());
+//        a.printDeque();
+//    }
 }
