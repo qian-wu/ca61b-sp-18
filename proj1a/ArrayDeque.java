@@ -90,6 +90,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
+        if (isEmpty()) {
+            return null;
+        }
         if (isLowCapisity()) {
             shrunk();
         }
@@ -101,6 +104,9 @@ public class ArrayDeque<T> {
     }
 
     public T removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
         if (isLowCapisity()) {
             shrunk();
         }
