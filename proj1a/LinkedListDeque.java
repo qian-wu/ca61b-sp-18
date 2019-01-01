@@ -111,7 +111,7 @@ public class LinkedListDeque<T> {
         return getRecursive(p.next, index - 1);
     }
 
-    private T getRecursive(int index) {
+    public T getRecursive(int index) {
         return getRecursive(sentinal.next, index);
     }
 

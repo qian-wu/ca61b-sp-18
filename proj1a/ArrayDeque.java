@@ -86,11 +86,7 @@ public class ArrayDeque<T> {
 
     private boolean isLowCapisity() {
         double percUsed = (double) size / (double) MAX_SIZE;
-        if (percUsed < LOWER_CAP) {
-            return true;
-        } else {
-            return false;
-        }
+        return percUsed < LOWER_CAP;
     }
 
     public T removeFirst() {
