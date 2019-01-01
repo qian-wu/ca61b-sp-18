@@ -92,7 +92,9 @@ public class LinkedListDeque<T> {
     }
 
     public T get(int index) {
-        if (this.isEmpty()) return null;
+        if (this.isEmpty()) {
+            return null;
+        }
 
         IntNode p = sentinal.next;
         while (index > 0) {

@@ -4,12 +4,6 @@ import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
 
-    @Test
-    public void testGetIndex() {
-        ArrayDeque a = new ArrayDeque();
-        assertEquals(7, a.getNextFirst(0));
-        assertEquals(0, a.getNextLast(7));
-    }
 
     @Test
     public void testAddFirst() {

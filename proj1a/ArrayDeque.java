@@ -87,7 +87,6 @@ public class ArrayDeque<T> {
     private boolean isLowCapisity() {
         double percUsed = (double) size / (double) MAX_SIZE;
         if (percUsed < LOWER_CAP) {
-            System.out.println("Yes is low");
             return true;
         } else {
             return false;
