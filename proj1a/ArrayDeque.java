@@ -118,10 +118,7 @@ public class ArrayDeque<T> {
     }
 
     public boolean isEmpty() {
-        if (item.length == 0) {
-            return true;
-        }
-        return false;
+        return this.size == 0;
     }
 
     public T get(int index) {
@@ -129,28 +126,17 @@ public class ArrayDeque<T> {
         return this.item[index];
     }
 
-//    public static void main(String[] args) {
-//        ArrayDeque<String> a = new ArrayDeque<String>();
-//        a.addFirst("2");
-//        a.addFirst("1");
-//        a.addLast("3");
-//        a.addLast("4");
-//        a.addLast("5");
-//        a.addLast("6");
-//        a.addLast("7");
-//        a.addLast("8");
-//        a.addLast("9");
-//        a.addLast("10");
-//
-//        a.removeLast();
-//        a.removeLast();
-//        a.removeLast();
-//        a.removeLast();
-//        a.removeLast();
-//        a.removeLast();
-//        a.removeLast();
-//
-//        System.out.println(a.size());
-//        a.printDeque();
-//    }
+    public static void main(String[] args) {
+        ArrayDeque<Integer> a = new ArrayDeque<Integer>();
+        for (int i = 0; i < 50; i++) {
+            a.addFirst(i);
+        }
+        System.out.println(a.size());
+
+        for (int i = 0; i < 50; i++) {
+            a.removeLast();
+        }
+        System.out.println(a.size());
+        System.out.println(a.isEmpty());
+    }
 }
