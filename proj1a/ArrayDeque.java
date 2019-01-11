@@ -95,7 +95,7 @@ public class ArrayDeque<T> {
 
     public T removeFirst() {
         if (isEmpty()) {
-            return (T) new Integer(19);
+            return null;
         }
         if (isLowCapisity()) {
             shrunk();
@@ -109,7 +109,7 @@ public class ArrayDeque<T> {
 
     public T removeLast() {
         if (isEmpty()) {
-            return (T) new Integer(19);
+            return null;
         }
         if (isLowCapisity()) {
             shrunk();
