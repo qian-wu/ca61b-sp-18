@@ -124,14 +124,14 @@ public class IntList {
         return new IntList(A.first, catenate(A.rest, B));
     }
 
-    public static void main(String[] args) {
-        IntList a = IntList.of(1, 2, 3, 4);
-        IntList b = IntList.of(6, 7, 8, 9);
-        IntList.dcatenate(a, b);
-        System.out.println(a);
-        IntList c = catenate(a, b);
-        System.out.println(c);
-    }
+//    public static void main(String[] args) {
+//        IntList a = IntList.of(1, 2, 3, 4);
+//        IntList b = IntList.of(6, 7, 8, 9);
+//        IntList.dcatenate(a, b);
+//        System.out.println(a);
+//        IntList c = catenate(a, b);
+//        System.out.println(c);
+//    }
 
 
 
