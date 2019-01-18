@@ -1,5 +1,5 @@
 
-public class LinkedListDeque<Item> implements Deque<Item>{
+public class LinkedListDeque<Item> implements Deque<Item> {
     private class IntNode {
         private Item item;
         private IntNode next;
