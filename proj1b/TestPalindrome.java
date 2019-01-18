@@ -34,5 +34,8 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("", cc));
         assertFalse(palindrome.isPalindrome("flakf", cc));
         assertFalse(palindrome.isPalindrome("abcba", cc));
+
+        CharacterComparator ccOff5 = new OffByN(5);
+        assertTrue(palindrome.isPalindrome("faafa", ccOff5));
     }
 }
