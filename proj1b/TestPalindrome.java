@@ -15,4 +15,24 @@ public class TestPalindrome {
         }
         assertEquals("persiflage", actual);
     }
+
+    @Test
+    public void testIsPalindrome() {
+        assertTrue(palindrome.isPalindrome("A"));
+        assertTrue(palindrome.isPalindrome("a"));
+        assertTrue(palindrome.isPalindrome(""));
+        assertTrue(palindrome.isPalindrome("aBcBa"));
+        assertTrue(palindrome.isPalindrome("abcba"));
+        assertFalse(palindrome.isPalindrome("Abcba"));
+    }
+
+    @Test
+    public void testIsPalindromeWithCC() {
+        CharacterComparator cc = new OffByOne();
+        assertTrue(palindrome.isPalindrome("flake", cc));
+        assertTrue(palindrome.isPalindrome("a", cc));
+        assertTrue(palindrome.isPalindrome("", cc));
+        assertFalse(palindrome.isPalindrome("flakf", cc));
+        assertFalse(palindrome.isPalindrome("abcba", cc));
+    }
 }

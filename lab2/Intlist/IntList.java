@@ -84,7 +84,7 @@ public class IntList {
         if (A == null) {
             return B;
         }
-        
+
         if (A.rest == null) {
             A.rest = B;
             return A;
