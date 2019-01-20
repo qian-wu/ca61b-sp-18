@@ -11,8 +11,12 @@ public class TestArrayDequeGold {
 
         Integer actual = 0;
         Integer expect = 0;
+        String errMsg = "";
+
+        StdRandom.setSeed(43);
 
         while (actual.equals(expect)) {
+
             number = StdRandom.uniform(1, 1000);
             oper = StdRandom.uniform(0, 4);
 
@@ -20,10 +24,12 @@ public class TestArrayDequeGold {
                 case 0 :
                     stuDque.addFirst(number);
                     solDeque.addFirst(number);
+                    errMsg += "addFirst(" + number +")\n";
                     break;
                 case 1 :
                     stuDque.addLast(number);
                     solDeque.addLast(number);
+                    errMsg += "addLast(" + number +")\n";
                     break;
                 case 2 :
                     if (stuDque.size() == 0 || solDeque.size() == 0) {
@@ -31,6 +37,7 @@ public class TestArrayDequeGold {
                     }
                     expect = stuDque.removeFirst();
                     actual = solDeque.removeFirst();
+                    errMsg += "removeFirst()\n";
                     break;
                 case 3 :
                     if (stuDque.size() == 0 || solDeque.size() == 0) {
@@ -38,13 +45,12 @@ public class TestArrayDequeGold {
                     }
                     expect = stuDque.removeLast();
                     actual = solDeque.removeLast();
+                    errMsg += "removeLast()\n";
                     break;
             }
         }
 
-        assertEquals("Oh noooo!\nThis is bad:\n   Random number " + actual
-                        + " not equal to " + expect + "!",
-                expect, actual);
+        assertEquals(errMsg, expect, actual);
     }
 
     public static void main(String[] args) {
