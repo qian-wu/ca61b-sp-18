@@ -12,15 +12,6 @@ public class DrawHexgons {
     private static final long SEED = 2873123;
     private static final Random RANDOM = new Random(SEED);
 
-    private static class Position {
-        private int x;
-        private int y;
-
-        public Position(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
     /**
      * Computes the width of row i for a size s hexagon.
