@@ -1,6 +1,6 @@
 package synthesizer;
 
-public interface BoundedQueue<T> {
+public interface BoundedQueue<T> extends Iterable<T> {
 
     // return size of the buffer
     int capacity();
