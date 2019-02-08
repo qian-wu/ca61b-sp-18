@@ -1,9 +1,9 @@
 import edu.princeton.cs.algs4.StdAudio;
-import synthesizer.*;
+import synthesizer.GuitarString;
 
 public class GuitarHero {
     private static final double CONCERT = 440.0;
-    private static final String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    private static final String KEYBOARD = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
 
     private static GuitarString[] initial(int size) {
         GuitarString[] guitarStrings = new GuitarString[size];
@@ -14,14 +14,14 @@ public class GuitarHero {
     }
 
     public static void main(String[] args) {
-        GuitarString[] strings = initial(keyboard.length());
+        GuitarString[] strings = initial(KEYBOARD.length());
 
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
 
-                for (int i = 0; i < keyboard.length(); i++) {
-                    if (key == keyboard.charAt(i)) {
+                for (int i = 0; i < KEYBOARD.length(); i++) {
+                    if (key == KEYBOARD.charAt(i)) {
                         strings[i].pluck();
                     }
                 }
