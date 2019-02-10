@@ -1,5 +1,8 @@
 package synthesizer;
 import org.junit.Test;
+
+import java.lang.reflect.Array;
+
 import static org.junit.Assert.*;
 
 /** Tests the ArrayRingBuffer class.
