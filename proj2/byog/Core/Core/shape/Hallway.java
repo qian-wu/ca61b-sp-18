@@ -3,17 +3,14 @@ package byog.Core.Core.shape;
 import byog.TileEngine.TETile;
 import byog.lab5.Position;
 
-public class Hallway extends GenericShape{
-    protected boolean isVertical;
+public class Hallway extends Rectangle{
 
-    public Hallway(Position p, int width, boolean isVertical) {
-        super(p, 1, 1);
-        this.isVertical = isVertical;
+    public Hallway(Position p, Size s, int orient) {
+        super(p, s, orient);
+    }
 
-        if (isVertical) {
-            this.high = width;
-        } else {
-            this.width = width;
-        }
+    @Override
+    public void draw(TETile[][] tiles) {
+        super.draw(tiles);
     }
 }

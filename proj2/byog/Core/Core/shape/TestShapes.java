@@ -18,23 +18,59 @@ public class TestShapes {
         }
     }
 
-    public void drawWall(Position p) {
-        TERenderer ter = new TERenderer();
-        ter.initialize(width, height);
-
-        tiles = new TETile[width][height];
-        initWorld(tiles);
-
-        Wall w = new Wall(p, 3, true);
-        w.draw(tiles);
-
-
-
-        ter.renderFrame(tiles);
-    }
-
-    public static void main(String[] args) {
-        TestShapes test = new TestShapes();
-        test.drawWall(new Position(10, 20));
-    }
+//    public void drawWall(Position p) {
+//        TERenderer ter = new TERenderer();
+//        ter.initialize(width, height);
+//
+//        tiles = new TETile[width][height];
+//        initWorld(tiles);
+//
+//        Wall w = new Wall(p, 3, true);
+//        w.draw(tiles);
+//
+//        Floor f = new Floor(new Position(p.x + 1, p.y), 3, 3);
+//        f.draw(tiles);
+//
+//        Wall w2 = new Wall(new Position(p.x + 4, p.y), 3, true);
+//        w2.draw(tiles);
+//
+//        ter.renderFrame(tiles);
+//    }
+//
+//    public void drawRectangle(Position p) {
+//        TERenderer ter = new TERenderer();
+//        ter.initialize(width, height);
+//
+//        tiles = new TETile[width][height];
+//        initWorld(tiles);
+//
+//        Rectangle r = new Rectangle(p, 20, 10);
+//        r.draw(tiles);
+//
+//        Rectangle r2 = new Rectangle(new Position(p.x, p.y + 15), 20, 3);
+//        r2.draw(tiles);
+//
+//        ter.renderFrame(tiles);
+//    }
+//
+//    public void drawHallway(Position p) {
+//        TERenderer ter = new TERenderer();
+//        ter.initialize(width, height);
+//
+//        tiles = new TETile[width][height];
+//        initWorld(tiles);
+//
+//        Hallway r = new Hallway(p, 20, false);
+//        r.draw(tiles);
+//
+//        Hallway r2 = new Hallway(new Position(p.x, p.y + 15), 10, true);
+//        r2.draw(tiles);
+//
+//        ter.renderFrame(tiles);
+//    }
+//
+//    public static void main(String[] args) {
+//        TestShapes test = new TestShapes();
+//        test.drawHallway(new Position(3, 3));
+//    }
 }
