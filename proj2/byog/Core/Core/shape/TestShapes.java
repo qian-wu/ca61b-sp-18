@@ -1,14 +1,21 @@
 package byog.Core.Core.shape;
 
+import byog.Core.Core.generator.ShapeGenerator;
+import byog.Core.RandomUtils;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import byog.lab5.Position;
 
+import java.util.Random;
+
 public class TestShapes {
     private int width = 80;
     private int height = 30;
     private TETile[][] tiles;
+
+    private static final long SEED = 43;
+    private static final Random RANDOM = new Random(SEED);
 
     private void initWorld(TETile[][] tiles) {
         for (int x = 0; x < this.width; x += 1) {
@@ -16,6 +23,10 @@ public class TestShapes {
                 tiles[x][y] = Tileset.NOTHING;
             }
         }
+    }
+
+    private Position getRandomPosition() {
+        return new Position(RandomUtils.uniform(RANDOM, 80), RandomUtils.uniform(RANDOM, 30));
     }
 
 //    public void drawWall(Position p) {
@@ -37,21 +48,21 @@ public class TestShapes {
 //        ter.renderFrame(tiles);
 //    }
 //
-//    public void drawRectangle(Position p) {
-//        TERenderer ter = new TERenderer();
-//        ter.initialize(width, height);
-//
-//        tiles = new TETile[width][height];
-//        initWorld(tiles);
-//
-//        Rectangle r = new Rectangle(p, 20, 10);
-//        r.draw(tiles);
-//
-//        Rectangle r2 = new Rectangle(new Position(p.x, p.y + 15), 20, 3);
-//        r2.draw(tiles);
-//
-//        ter.renderFrame(tiles);
-//    }
+    public void drawRectangle() {
+        TERenderer ter = new TERenderer();
+        ter.initialize(width, height);
+
+        tiles = new TETile[width][height];
+        initWorld(tiles);
+
+        for (int i = 0; i < 30; i++) {
+            Position p = getRandomPosition();
+            Rectangle r = ShapeGenerator.getRectangle(tiles, p, 1);
+            r.draw();
+        }
+
+        ter.renderFrame(tiles);
+    }
 //
 //    public void drawHallway(Position p) {
 //        TERenderer ter = new TERenderer();
@@ -69,8 +80,8 @@ public class TestShapes {
 //        ter.renderFrame(tiles);
 //    }
 //
-//    public static void main(String[] args) {
-//        TestShapes test = new TestShapes();
-//        test.drawHallway(new Position(3, 3));
-//    }
+    public static void main(String[] args) {
+        TestShapes test = new TestShapes();
+        test.drawRectangle();
+    }
 }

@@ -2,7 +2,9 @@ package byog.Core.Core.generator;
 
 import byog.Core.Core.shape.*;
 import byog.Core.RandomUtils;
+import byog.TileEngine.TETile;
 import byog.lab5.Position;
+import org.w3c.dom.css.Rect;
 
 import java.util.Random;
 
@@ -11,7 +13,7 @@ public class ShapeGenerator {
     private static final long SEED = 43;
     private static final Random RANDOM = new Random(SEED);
 
-    private static Shape getShape(Position p, boolean isWall) {
+    private static Shape getShape(TETile[][] tiles, Position p, boolean isWall, int orient) {
         // 50% chance get null
         int chance = RandomUtils.uniform(RANDOM, 1);
         if (chance == 1) {
@@ -29,26 +31,26 @@ public class ShapeGenerator {
 
         //get orientation down left right  up
         //                  0    2    3    1
-        int orient = RandomUtils.uniform(RANDOM, 4);
+//        int orient = RandomUtils.uniform(RANDOM, 4);
 
         if (isWall) {
-            result = new Hallway(p, s, orient);
+            result = new Hallway(tiles, p, s, orient);
         } else {
-            result = new Rectangle(p, s, orient);
+            result = new Rectangle(tiles, p, s, orient);
         }
 
         return result;
     }
 
-    public static Shape getRectangle(Position p) {
-        return getShape(p, false);
+    public static Rectangle getRectangle(TETile[][] tiles, Position p, int orient) {
+        return (Rectangle) getShape(tiles, p, false, orient);
     }
 
-    public static Shape getWall(Position p) {
-        return getShape(p, true);
+    public static Wall getWall(TETile[][] tiles, Position p, int orient) {
+        return (Wall)getShape(tiles, p, true, orient);
     }
 
-    public static Position adjustPosition(Position p, Size s, int orient) {
+    public static Position getStartPosition(Position p, Size s, int orient) {
         switch (orient) {
             case 0:
                 p.y -= s.height;
@@ -65,11 +67,13 @@ public class ShapeGenerator {
         return p;
     }
 
+
+
     public static void main(String[] args) {
         for (int i = 0; i < 20; i++) {
             Position p = new Position(10, 10);
             Size s = new Size(4, 3);
-            p = adjustPosition(p, s, 3);
+            p = getStartPosition(p, s, 3);
             System.out.println(p.x + " " + p.y);
         }
     }

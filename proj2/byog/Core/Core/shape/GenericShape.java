@@ -7,16 +7,17 @@ public abstract class GenericShape implements Shape {
     protected Position p;
     protected Size s;
     protected int orient;
+    protected TETile[][] tiles;
 
-    public GenericShape(Position p, Size s, int orient) {
+    public GenericShape(TETile[][] tiles, Position p, Size s, int orient) {
         this.p = p;
         this.s = s;
         this.orient = orient;
+        this.tiles = tiles;
     }
 
     @Override
-    public abstract void draw(TETile[][] tiles);
-
+    public abstract void draw();
 
     public void draw(TETile[][] tiles, TETile t) {
         for (int i = 0; i < s.width; i++) {
