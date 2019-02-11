@@ -8,8 +8,8 @@ public class Wall extends GenericShape {
 
     private static final TETile t = Tileset.WALL;
 
-    public Wall(TETile[][] tiles, Position p, Size s, int orient) {
-        super(tiles, p, s, orient);
+    public Wall(TETile[][] tiles, Position entrance, Position p, Size s, int orient) {
+        super(tiles, entrance, p, s, orient);
     }
 
     public void draw() {

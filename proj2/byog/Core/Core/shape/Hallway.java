@@ -5,8 +5,8 @@ import byog.lab5.Position;
 
 public class Hallway extends Rectangle{
 
-    public Hallway(TETile[][] tiles, Position p, Size s, int orient) {
-        super(tiles, p, s, orient);
+    public Hallway(TETile[][] tiles, Position entrance, Position p, Size s, int orient) {
+        super(tiles, entrance, p, s, orient);
     }
 
     @Override
@@ -14,8 +14,4 @@ public class Hallway extends Rectangle{
         super.draw();
     }
 
-    @Override
-    protected boolean isValidPosition() {
-        return super.isValidPosition();
-    }
 }

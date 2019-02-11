@@ -26,19 +26,23 @@ public class ShapeGenerator {
         //get Size
         int width = RandomUtils.uniform(RANDOM, 6,10);
         int height = RandomUtils.uniform(RANDOM, 6,10);
-//        int width = 8;
-//        int height = 6;
 
         s = new Size(width, height);
-
-        //get orientation down left right  up
-        //                  0    2    3    1
-//        int orient = RandomUtils.uniform(RANDOM, 4);
 
         if (isWall) {
             result = new Hallway(tiles, p, s, orient);
         } else {
             result = new Rectangle(tiles, p, s, orient);
+        }
+
+        // check is valid shape
+        Position entrance = new Position(p.x, p.y);
+        System.out.println("Start Position : " + entrance.x + " " + entrance.y);
+
+        Position startPosition = getStartPosition(entrance, s, orient);
+
+        if (!updatePositon(entrance)) {
+            return;
         }
 
         return result;

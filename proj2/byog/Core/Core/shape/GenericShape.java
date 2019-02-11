@@ -4,16 +4,17 @@ import byog.TileEngine.TETile;
 import byog.lab5.Position;
 
 public abstract class GenericShape implements Shape {
-    protected Position p;
+    protected Position p, entrance;
     protected Size s;
     protected int orient;
     protected TETile[][] tiles;
 
-    public GenericShape(TETile[][] tiles, Position p, Size s, int orient) {
+    public GenericShape(TETile[][] tiles, Position entrance, Position p, Size s, int orient) {
         this.p = p;
         this.s = s;
         this.orient = orient;
         this.tiles = tiles;
+        this.entrance = entrance;
     }
 
     @Override
