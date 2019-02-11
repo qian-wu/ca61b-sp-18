@@ -55,9 +55,13 @@ public class TestShapes {
         tiles = new TETile[width][height];
         initWorld(tiles);
 
-        for (int i = 0; i < 30; i++) {
+        int[] a = {1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2};
+        for (int i = 0; i < 20; i++) {
             Position p = getRandomPosition();
-            Rectangle r = ShapeGenerator.getRectangle(tiles, p, 1);
+            Rectangle r = ShapeGenerator.getRectangle(tiles, p, a[i]);
+            if (r == null) {
+                continue;
+            }
             r.draw();
         }
 

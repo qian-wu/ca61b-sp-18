@@ -16,16 +16,17 @@ public class Rectangle extends GenericShape{
 
     public void draw() {
         //adjust start position
-        Position startPosition = this.p;
+        Position entrance = new Position(this.p.x, this.p.y);
+        System.out.println("Start Position : " + entrance.x + " " + entrance.y);
 
         this.p = getStartPosition();
 
-        if (!updatePositon()) {
+        if (!updatePositon(entrance)) {
             return;
         }
 
-        System.out.println("Position : " + p.x + " " + p.y);
-        System.out.println("Size :" + s.width + " " + s.height);
+        System.out.println("Adjust Position : " + p.x + " " + p.y);
+        System.out.println("Final size :" + s.width + " " + s.height);
         List<Position> corners = getCorners();
         //draw walls
         Wall w_h0 = new Wall(tiles, corners.get(0), new Size(s.width, 1), 0);
@@ -43,33 +44,36 @@ public class Rectangle extends GenericShape{
         Floor f = new Floor(tiles, p_f, new Size(s.width - 2, s.height -2), 0);
         f.draw();
 
+        // set entrance be floor
+        new Floor(tiles, entrance, new Size(1, 1), 0).draw();
     }
 
-    private boolean updatePositon() {
+    private boolean updatePositon(Position entrance) {
         while(!isValidPosition()) {
 
-            System.out.println("Position : " + p.x + " " + p.y);
-            System.out.println("Size :" + s.width + " " + s.height);
+            if (s.width > 2 && s.height > 2 ) {
 
-            if (s.width > 3 && s.height > 3) {
-                update();
+                update(entrance);
             } else {
+                System.out.println("    size less than 3 :" + s.width + " " + s.height);
+                System.out.println("    or not validation position p : " + p.x + " " + p.y + " entrance : " + entrance.x + " " + entrance.y);
                 return false;
             }
         }
         return true;
     }
 
-    private void update() {
-        this.s = new Size(s.width - 1, s.height - 1);
-        this.p = ShapeGenerator.getStartPosition(p, s, orient);
+    private void update(Position entrance) {
+//
+        this.p = ShapeGenerator.getStartPosition(new Position(entrance.x, entrance.y), s, orient);
 
     }
 
     protected boolean isValidPosition() {
-        if (!isAllCornersInMap()) {
-            return false;
-        }
+//        if (!isAllCornersInMap()) {
+//            System.out.println("corner not in map");
+//            return false;
+//        }
 
         for (Position p : getCorners()) {
             if (!isEmptyTiles(p)) {
@@ -95,7 +99,34 @@ public class Rectangle extends GenericShape{
     }
 
     private boolean isEmptyTiles(Position p) {
-        return tiles[p.x][p.y].equals(Tileset.NOTHING);
+        int mapWidth = tiles.length;
+        int mapHeight = tiles[0].length;
+
+        for (int i = p.x; i < p.x + s.width; i++) {
+            if (i < 0 || i >= mapWidth) {
+                System.out.println("    out of map on x " + i);
+                s.width -= 1;
+                System.out.println("    update size to " + s.width + " " + s.height);
+                return false;
+            }
+
+            for (int j = p.y; j < p.y + s.height; j++) {
+                if (j < 0 || j >= mapHeight) {
+                    System.out.println("    out of map on y " + j);
+                    s.height -= 1;
+                    System.out.println("    update size to " + s.width + " " + s.height);
+                    return false;
+                }
+
+                if (!tiles[i][j].equals(Tileset.NOTHING)) {
+                    System.out.println("    map is not empty on x " + i + " y " + j);
+                    this.s = ShapeGenerator.resize(s);
+                    System.out.println("    update size to " + s.width + " " + s.height);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public ArrayList<Position> getCorners() {
