@@ -10,7 +10,7 @@ import java.util.Random;
 
 //Random generator Shape
 public class ShapeGenerator {
-    private static final long SEED = 44;
+    private static final long SEED = 43;
     private static final Random RANDOM = new Random(SEED);
     private static int count = 0;
 
@@ -102,6 +102,18 @@ public class ShapeGenerator {
         return s;
     }
 
+    public static Position getRandomPosition(int mapWidth, int mapHeight) {
+        Position p;// get Random Size
+        int x = (int) RandomUtils.gaussian(RANDOM, mapWidth / 2,10);
+        int y = (int) RandomUtils.gaussian(RANDOM, mapHeight / 2,10);
+        p = new Position(x, y);
+        return p;
+    }
+
+    public static int getRandomOrient() {
+        return RandomUtils.uniform(RANDOM, 4);
+    }
+
     public static Rectangle getRectangle(TETile[][] tiles, Position p, int orient) {
         return (Rectangle) getShape(tiles, p, false, orient);
     }
@@ -143,9 +155,9 @@ public class ShapeGenerator {
     public static Size resize(Size s) {
         int chance = RandomUtils.uniform(RANDOM, 2);
         if (chance == 0) {
-            return new Size(s.width, s.height - 1);
+            return new Size(s.width, s.height - 3);
         } else {
-            return new Size(s.width - 1, s.height);
+            return new Size(s.width - 3, s.height);
         }
     }
 
@@ -156,13 +168,9 @@ public class ShapeGenerator {
         return RandomUtils.uniform(RANDOM, start, end);
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 2; i++) {
-            Position p = new Position(10, 10);
-            System.out.println("Start position " + p.x + " " + p.y);
-            Size s = new Size(4, 3);
-            p = getStartPosition(p, s, 0);
-            System.out.println("Adjust position " + p.x + " " + p.y);
-        }
-    }
+//    public static void main(String[] args) {
+//        for (int i = 0; i < 20; i++) {
+//            System.out.println("Orient : " + ShapeGenerator.getRandomOrient());
+//        }
+//    }
 }

@@ -72,5 +72,6 @@ public class TestShapes {
         TestShapes test = new TestShapes();
         test.drawRectangle();
 //        test.drawWall();
+
     }
 }

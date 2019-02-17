@@ -1,7 +1,12 @@
 package byog.Core;
 
+import byog.Core.Core.generator.ShapeGenerator;
+import byog.Core.Core.shape.Rectangle;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
+import byog.lab5.HexWorld;
+import byog.lab5.Position;
 
 public class Game {
     TERenderer ter = new TERenderer();
@@ -28,11 +33,55 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
-        // and return a 2D tile representation of the world that would have been
-        // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = null;
+        int seed = 0;
+
+        if (input.charAt(0) != 'N') {
+            return null;
+        }
+
+        for (int i = 1; i < input.length(); i++) {
+            char c = input.charAt(i);
+
+            if (c == 'S') {
+                break;
+            }
+
+            if (isNumeric(c)) {
+                seed = 10 * seed + Integer.parseInt(String.valueOf(c));
+            }
+        }
+
+        //initial world
+        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        initWorld(finalWorldFrame);
+
+        //get start position
+        Position start = ShapeGenerator.getRandomPosition(WIDTH, HEIGHT);
+
+        //draw shape
+        Rectangle r = ShapeGenerator.getRectangle(finalWorldFrame, start, ShapeGenerator.getRandomOrient());
+        r.draw();
+
+        finalWorldFrame[start.x][start.y] = Tileset.LOCKED_DOOR;
+
         return finalWorldFrame;
+    }
+
+    private boolean isNumeric(char c) {
+        try{
+            int i = Integer.parseInt(String.valueOf(c));
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private void initWorld(TETile[][] tiles) {
+        for (int x = 0; x < this.WIDTH; x += 1) {
+            for (int y = 0; y < this.HEIGHT; y += 1) {
+                tiles[x][y] = Tileset.NOTHING;
+            }
+        }
     }
 }
