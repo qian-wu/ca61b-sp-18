@@ -16,7 +16,7 @@ public class TestRectangle {
         Position p = new Position(5, 5);
         Size s = new Size(4, 3);
 
-        Rectangle r = new Rectangle(tiles, p, s, 0);
+        Rectangle r = new Rectangle(tiles, p, p, s, 0);
         ArrayList<Position> a = r.getCorners();
 
         assertTrue(a.get(0).equals(new Position(5, 5)));

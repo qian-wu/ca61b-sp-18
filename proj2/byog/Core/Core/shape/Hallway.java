@@ -5,8 +5,8 @@ import byog.lab5.Position;
 
 public class Hallway extends Rectangle{
 
-    public Hallway(TETile[][] tiles, Position entrance, Position p, Size s, int orient) {
-        super(tiles, entrance, p, s, orient);
+    public Hallway(TETile[][] tiles, Position entrance, Size s, int orient) {
+        super(tiles, entrance, entrance, s, orient);
     }
 
     @Override

@@ -1,45 +1,70 @@
 package byog.Core.Core.shape;
 
-import byog.Core.Core.generator.ShapeGenerator;
 import byog.TileEngine.TETile;
-import byog.TileEngine.Tileset;
 import byog.lab5.Position;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rectangle extends GenericShape{
+public class Rectangle extends AbstractShape {
 
-    public Rectangle(TETile[][] tiles, Position entrance, Position p, Size s, int orient) {
-        super(tiles, entrance, p, s, orient);
+    public Rectangle(TETile[][] tiles, Position entrance, Position drawPosition, Size s, int orient) {
+        super(tiles, entrance, drawPosition, s, orient);
     }
 
     public void draw() {
-        //adjust start position
-        Position entrance = new Position(this.p.x, this.p.y);
-        System.out.println("Start Position : " + entrance.x + " " + entrance.y);
+        System.out.println("Draw rectangle on : " + entrance.x + " " + entrance.y);
+        System.out.println("    size : " + s.width + " " + s.height);
+        System.out.println("    orient : " + orient);
 
-        System.out.println("Adjust Position : " + p.x + " " + p.y);
-        System.out.println("Final size :" + s.width + " " + s.height);
         List<Position> corners = getCorners();
-        //draw walls
-//        Wall w_h0 = new Wall(tiles, corners.get(0), new Size(s.width, 1), 0);
-//        Wall w_h1 = new Wall(tiles, corners.get(2), new Size(s.width, 1), 1);
-//        Wall w_v0 = new Wall(tiles, corners.get(0), new Size(1, s.height), 2);
-//        Wall w_v1 = new Wall(tiles, corners.get(1), new Size(1, s.height), 3);
 
-//        w_h0.draw();
-//        w_h1.draw();
-//        w_v0.draw();
-//        w_v1.draw();
+        //check is the wall need extend other shape
+        boolean[] isExtends = new boolean[]{true, true, true, true};
+        checkWallExtention(isExtends);
+//        draw walls
+
+        // v0 $  $  v1
+        // $  f  f  $
+        // $  f  f  $
+        // h0 $  $  h1
+        //          0  1  2  3
+        // corners h0 h1 v0 v1
+        Wall w_h0 = new Wall(tiles, corners.get(0), s.width, 0, isExtends[0]);
+        Wall w_h1 = new Wall(tiles, corners.get(2), s.width, 1, isExtends[1]);
+        Wall w_v0 = new Wall(tiles, corners.get(0), s.height, 2, isExtends[2]);
+        Wall w_v1 = new Wall(tiles, corners.get(1), s.height, 3, isExtends[3]);
+
+        w_h0.draw();
+        w_h1.draw();
+        w_v0.draw();
+        w_v1.draw();
+
+        w_h0.extendWall();
+        w_h1.extendWall();
+        w_v0.extendWall();
+        w_v1.extendWall();
 
         //draw floors
-        Position p_f = new Position(p.x + 1, p.y + 1);
-        Floor f = new Floor(tiles, p_f, p_f, new Size(s.width - 2, s.height -2), 0);
+        Position p_f = new Position(drawPosition.x + 1, drawPosition.y + 1);
+        Floor f = new Floor(tiles, p_f, new Size(s.width - 2, s.height -2));
         f.draw();
 
         // set entrance be floor
-        new Floor(tiles, entrance, entrance, new Size(1, 1), 0).draw();
+        setFloor(entrance);
+    }
+
+    private void checkWallExtention(boolean[] isExtends) {
+        switch (orient) {
+            case 0:
+                isExtends[1] = false;break;
+            case 1:
+                isExtends[0] = false;break;
+            case 2:
+                isExtends[3] = false;break;
+            case 3:
+                isExtends[2] = false;break;
+        }
     }
 
 //    private boolean updatePositon(Position entrance) {
@@ -129,10 +154,10 @@ public class Rectangle extends GenericShape{
         // $  f  f  $
         // $  f  f  $
         // h0 $  $  h1
-        Position p_h0 = p;
-        Position p_v0 = new Position(p.x, p.y + s.height - 1);
-        Position p_h1 = new Position(p.x + s.width - 1, p.y);
-        Position p_v1 = new Position(p.x + s.width - 1, p.y + s.height - 1);
+        Position p_h0 = drawPosition;
+        Position p_v0 = new Position(drawPosition.x, drawPosition.y + s.height - 1);
+        Position p_h1 = new Position(drawPosition.x + s.width - 1, drawPosition.y);
+        Position p_v1 = new Position(drawPosition.x + s.width - 1, drawPosition.y + s.height - 1);
 
         ArrayList<Position> corners = new ArrayList();
         corners.add(p_h0);

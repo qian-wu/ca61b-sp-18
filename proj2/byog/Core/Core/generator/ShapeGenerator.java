@@ -3,49 +3,103 @@ package byog.Core.Core.generator;
 import byog.Core.Core.shape.*;
 import byog.Core.RandomUtils;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
 import byog.lab5.Position;
-import org.w3c.dom.css.Rect;
 
 import java.util.Random;
 
 //Random generator Shape
 public class ShapeGenerator {
-    private static final long SEED = 43;
+    private static final long SEED = 44;
     private static final Random RANDOM = new Random(SEED);
+    private static int count = 0;
 
-    private static Shape getShape(TETile[][] tiles, Position p, boolean isWall, int orient) {
+    private static Shape getShape(TETile[][] tiles, Position entrance, boolean isWall, int orient) {
         // 50% chance get null
-//        int chance = RandomUtils.uniform(RANDOM, 2);
+//        int chance = RandomUtils.uniform(RANDOM, 4);
 //        if (chance == 1) {
+//            return null;
+//        }
+//        System.out.println("Entrance Position : " + entrance.x + " " + entrance.y);
+//        if (count > 34) {
 //            return null;
 //        }
 
         Shape result;
-        Size s;
+        Size s = getRandomSize();
 
-        //get Size
-        int width = RandomUtils.uniform(RANDOM, 6,10);
-        int height = RandomUtils.uniform(RANDOM, 6,10);
-
-        s = new Size(width, height);
+        Position drawPosition = getValidDrawPositon(tiles, entrance, s, orient);
+        if (drawPosition == null) {
+            return null;
+        }
 
         if (isWall) {
-            result = new Hallway(tiles, p, s, orient);
+            result = new Hallway(tiles, entrance, s, orient);
         } else {
-            result = new Rectangle(tiles, p, s, orient);
+            result = new Rectangle(tiles, entrance, drawPosition, s, orient);
         }
 
-        // check is valid shape
-        Position entrance = new Position(p.x, p.y);
-        System.out.println("Start Position : " + entrance.x + " " + entrance.y);
-
-        Position startPosition = getStartPosition(entrance, s, orient);
-
-        if (!updatePositon(entrance)) {
-            return;
-        }
-
+        count ++;
         return result;
+    }
+
+    private static Position getValidDrawPositon(TETile[][] tiles, Position entrance, Size s, int orient) {
+        // get start position
+        Position drawPosition = getStartPosition(entrance, s, orient);
+//        System.out.println("Start Position : " + drawPosition.x + " " + drawPosition.y);
+
+        while(!isEmptyTiles(tiles, drawPosition, s)) {
+
+            if (s.width > 2 && s.height > 2 ) {
+                drawPosition = getStartPosition(entrance, s, orient);
+            } else {
+//                System.out.println("    size less than 3 :" + s.width + " " + s.height);
+//                System.out.println("    or not validation start position : " + drawPosition.x + " " + drawPosition.y);
+                return null;
+            }
+        }
+        return drawPosition;
+    }
+
+    private static boolean isEmptyTiles(TETile[][] tiles, Position p, Size s) {
+        int mapWidth = tiles.length;
+        int mapHeight = tiles[0].length;
+
+        for (int i = p.x; i < p.x + s.width; i++) {
+            if (i < 0 || i >= mapWidth) {
+//                System.out.println("    out of map on x " + i);
+                s.width -= 1;
+//                System.out.println("    update size to " + s.width + " " + s.height);
+                return false;
+            }
+
+            for (int j = p.y; j < p.y + s.height; j++) {
+                if (j < 0 || j >= mapHeight) {
+//                    System.out.println("    out of map on y " + j);
+                    s.height -= 1;
+//                    System.out.println("    update size to " + s.width + " " + s.height);
+                    return false;
+                }
+
+                if (!tiles[i][j].equals(Tileset.NOTHING)) {
+//                    System.out.println("    map is not empty on x " + i + " y " + j);
+                    Size newSize = ShapeGenerator.resize(s);
+                    s.width = newSize.width;
+                    s.height = newSize.height;
+//                    System.out.println("    update size to " + s.width + " " + s.height);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static Size getRandomSize() {
+        Size s;// get Random Size
+        int width = RandomUtils.uniform(RANDOM, 5,10);
+        int height = RandomUtils.uniform(RANDOM, 5,10);
+        s = new Size(width, height);
+        return s;
     }
 
     public static Rectangle getRectangle(TETile[][] tiles, Position p, int orient) {
@@ -56,7 +110,9 @@ public class ShapeGenerator {
         return (Wall)getShape(tiles, p, true, orient);
     }
 
-    public static Position getStartPosition(Position p, Size s, int orient) {
+    public static Position getStartPosition(Position entrance, Size s, int orient) {
+        Position p = new Position(entrance.x, entrance.y);
+
         int adjustX = RandomUtils.uniform(RANDOM, 1, s.width - 1);
         int adjustY = RandomUtils.uniform(RANDOM, 1, s.height - 1);
 
@@ -91,6 +147,13 @@ public class ShapeGenerator {
         } else {
             return new Size(s.width - 1, s.height);
         }
+    }
+
+    public static int getRandomShift(int start, int end) {
+        if (start == end) {
+            return 1;
+        }
+        return RandomUtils.uniform(RANDOM, start, end);
     }
 
     public static void main(String[] args) {
