@@ -13,6 +13,7 @@ public class MemoryGame {
     private Random rand;
     private boolean gameOver;
     private boolean playerTurn;
+    private static int seed;
     private static final char[] CHARACTERS = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     private static final String[] ENCOURAGEMENT = {"You can do this!", "I believe in you!",
                                                    "You got this!", "You're a star!", "Go Bears!",
@@ -24,7 +25,7 @@ public class MemoryGame {
             return;
         }
 
-        int seed = Integer.parseInt(args[0]);
+        seed = Integer.parseInt(args[0]);
         MemoryGame game = new MemoryGame(40, 40);
         game.startGame();
     }
@@ -44,20 +45,44 @@ public class MemoryGame {
         StdDraw.enableDoubleBuffering();
 
         //TODO: Initialize random number generator
+        String randNumber = generateRandomString(3);
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
-        return null;
+        rand = new Random(seed);
+        String s = "";
+        for (int i = 0; i < n; i++) {
+            int number = rand.nextInt(CHARACTERS.length);
+            s += CHARACTERS[number];
+        }
+
+        return s;
     }
 
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
         //TODO: If game is not over, display relevant game information at the top of the screen
+        StdDraw.clear();
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setPenColor(Color.red);
+        StdDraw.text(this.width / 2, this.height / 2, s);
+        StdDraw.show();
     }
 
     public void flashSequence(String letters) {
         //TODO: Display each character in letters, making sure to blank the screen between letters
+        for (int i = 0; i < letters.length(); i++) {
+            try{
+                drawFrame(String.valueOf(letters.charAt(i)));
+                Thread.sleep(1000);
+                drawFrame("");
+                Thread.sleep(500);
+            } catch(InterruptedException e) {
+                System.out.println(e);
+            }
+
+        }
     }
 
     public String solicitNCharsInput(int n) {
@@ -69,6 +94,10 @@ public class MemoryGame {
         //TODO: Set any relevant variables before the game starts
 
         //TODO: Establish Game loop
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
     }
 
 }
