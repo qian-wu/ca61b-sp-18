@@ -62,7 +62,7 @@ public class MemoryGame {
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
         //TODO: If game is not over, display relevant game information at the top of the screen
-        StdDraw.clear();
+        StdDraw.clear(Color.BLACK);
         Font font = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(font);
         StdDraw.setPenColor(Color.red);
@@ -86,18 +86,44 @@ public class MemoryGame {
     }
 
     public String solicitNCharsInput(int n) {
-        //TODO: Read n letters of player input
-        return null;
+        String inputString = "";
+        drawFrame(inputString);
+        while (inputString.length() < n) {
+            if (StdDraw.hasNextKeyTyped()) {
+                inputString += StdDraw.nextKeyTyped();
+                drawFrame(inputString);
+            } else {
+                continue;
+            }
+        }
+        StdDraw.pause(500);
+        return inputString;
     }
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
-
+        int round;
         //TODO: Establish Game loop
+        for (round = 1; ; round++) {
+            drawFrame("Round : " + round);
+            StdDraw.pause(1000);
+
+            drawFrame("");
+            StdDraw.pause(500);
+
+            String s = generateRandomString(round);
+            flashSequence(s);
+            String input = solicitNCharsInput(round);
+
+            if (!s.equals(input)) {
+                drawFrame("Game Over! You made it to round: " + round);
+                break;
+            }
+        }
     }
 
-    public void setSeed(int seed) {
-        this.seed = seed;
+    public static void setSeed(int seed) {
+        seed = seed;
     }
 
 }

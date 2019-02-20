@@ -28,6 +28,7 @@ public class MemoryGameTest {
 
     @Test
     public void solicitNCharsInput() {
+        game.solicitNCharsInput(5);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class MemoryGameTest {
     public static void main(String[] args) {
         game.setSeed(43);
         String s = game.generateRandomString(5);
-        game.flashSequence(s);
+        System.out.println(game.solicitNCharsInput(s.length()));
     }
 
 }
