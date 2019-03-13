@@ -108,9 +108,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (p == null) {
             return;
         }
-        keys.add(p.key);
+
         keySetHelper(keys, p.left);
+        keys.add(p.key);
         keySetHelper(keys, p.right);
+
     }
 
     /** Removes KEY from the tree if present
@@ -119,7 +121,43 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        return remove(key);
+    }
+
+    private Node delete(Node p, K key, V value) {
+        if (p == null) return null;
+
+        int cmp = key.compareTo(p.key);
+        if (cmp < 0) p.left = delete(p.left, key, value);
+        else if (cmp > 0) p.right = delete(p.right, key, value);
+        else if (!value.equals(p.value)) {
+            return null;
+        }
+        else if (value == null || value.equals(p.value)) {;
+
+            if (p.left == null) return p.right;
+            if (p.right == null) return p.left;
+
+            Node x = min(p);
+            x.left = p.left;
+            x.right = deleteMin(p.right);
+            p = x;
+        }
+        return p;
+    }
+
+    private Node min(Node p) {
+        if (p.left == null) {
+            return p;
+        }
+        return min(p.left);
+    }
+
+    private Node deleteMin(Node p) {
+        if (p.left == null) return p.right;
+
+        p.left = deleteMin(p.left);
+        return p;
     }
 
     /** Removes the key-value entry for the specified key only if it is
@@ -128,7 +166,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        Node p = delete(root, key, value);
+        return p.value;
     }
 
     @Override
