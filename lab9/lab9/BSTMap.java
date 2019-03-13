@@ -121,7 +121,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        return remove(key);
+        return remove(key, null);
     }
 
     private Node delete(Node p, K key, V value) {
