@@ -131,16 +131,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (cmp < 0) p.left = delete(p.left, key, value);
         else if (cmp > 0) p.right = delete(p.right, key, value);
         else if (!value.equals(p.value)) {
-            return null;
+            return p;
         }
         else if (value == null || value.equals(p.value)) {;
 
             if (p.left == null) return p.right;
             if (p.right == null) return p.left;
 
-            Node x = min(p);
-            x.left = p.left;
+            Node x = min(p.right);
+
             x.right = deleteMin(p.right);
+            x.left = p.left;
             p = x;
         }
         return p;

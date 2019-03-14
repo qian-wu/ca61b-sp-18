@@ -100,7 +100,7 @@ public class TestBSTMap {
         b.put(6, 6);
         b.put(9, 9);
 
-        b.remove(2, 2);
+        b.remove(5, 5);
         Set<Integer> s = b.keySet();
 
         for (Integer i : s) {
