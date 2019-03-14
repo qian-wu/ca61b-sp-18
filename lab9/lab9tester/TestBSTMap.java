@@ -100,7 +100,8 @@ public class TestBSTMap {
         b.put(6, 6);
         b.put(9, 9);
 
-        b.remove(5, 5);
+        assertEquals(b.remove(5, 5), Integer.valueOf(5));
+        assertNotEquals(b.remove(5, 3), Integer.valueOf(5));
         Set<Integer> s = b.keySet();
 
         for (Integer i : s) {
