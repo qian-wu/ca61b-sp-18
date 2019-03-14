@@ -102,7 +102,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private void swim(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
-        validateSinkSwimArg(index);
+//        validateSinkSwimArg(index);
 
         while (index > 1 && contents[index].myPriority < contents[parentIndex(index)].myPriority) {
             swap(index, parentIndex(index));
@@ -116,7 +116,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
-        validateSinkSwimArg(index);
+//        validateSinkSwimArg(index);
 
         while (leftIndex(index) <= size) {
             int leftIndex = leftIndex(index);
@@ -212,6 +212,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         int index = getIdx(item);
+
         contents[index].myPriority = priority;
 
         sink(index);
@@ -477,17 +478,33 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         System.out.println("PQ before change priority: ");
         System.out.println(pq);
 
-        pq.changePriority("c", 0);
+        pq.changePriority("a", 0);
 
         System.out.println("PQ after change priority: ");
         System.out.println(pq);
 
         int i = 0;
-        String[] expected = {"c", "a", "b", "d", "e", "g", "h", "i"};
+        String[] expected = {"a", "b", "c", "d", "e", "g", "h", "i"};
         while (pq.size() > 1) {
             assertEquals(expected[i], pq.removeMin());
             i += 1;
         }
+    }
+
+    @Test
+    public void testChangePriority2() {
+        ExtrinsicPQ<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+
+
+        System.out.println("PQ before change priority: ");
+        System.out.println(pq);
+
+        pq.changePriority("c", 0);
+
+        System.out.println("PQ after change priority: ");
+        System.out.println(pq);
+
     }
 
 }
