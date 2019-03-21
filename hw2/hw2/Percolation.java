@@ -49,7 +49,7 @@ public class Percolation {
     public void open(int row, int col) {     // open the site (row, col) if it is not open already
         //union with all neighbors to one set
         unionAllNeighbors(row, col);
-
+        openSize += 1;
     }
 
 
