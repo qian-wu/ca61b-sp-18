@@ -119,19 +119,19 @@ public class Percolation {
         int setNumber = connectedSet.find(xyTo1D(row, col));
 //        System.out.println("update on : " + row + " " + col + ", set : " + setNumber);
 
-        List removeSites = new ArrayList();
+//        List removeSites = new ArrayList();
         for (int i = 0; i < openSiteList.size(); i++) {
             Site s = openSiteList.get(i);
             if (connectedSet.find(s.id) == setNumber && s.isOpen && !s.isFull) {
 //                System.out.println("update " + i + " " + j);
                 s.isFull = true;
-                removeSites.add(i);
+//                removeSites.add(i);
             }
         }
 
-        for (int j = 0; j < removeSites.size(); j++) {
-            openSiteList.remove(j);
-        }
+//        for (int j = 0; j < removeSites.size(); j++) {
+//            openSiteList.remove(j);
+//        }
     }
 
     private void fillTo(int fromRow, int fromCol, int toRow, int toCol) {

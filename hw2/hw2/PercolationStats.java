@@ -68,10 +68,10 @@ public class PercolationStats {
         return mu + 1.96 * sigma / Math.sqrt(T);
     }
 
-    public static void main(String[] args) {
-        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
-        System.out.println(s.mean());
-        System.out.println(s.stddev());
-    }
+//    public static void main(String[] args) {
+//        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
+//        System.out.println(s.mean());
+//        System.out.println(s.stddev());
+//    }
 
 }

@@ -84,6 +84,6 @@ public class PercolationVisualizer {
 //        String filename = args[0];
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
-        simulateFromFile("6.txt");
+        simulateFromFile("input6.txt");
     }
 }
