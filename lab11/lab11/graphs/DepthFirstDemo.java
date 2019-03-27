@@ -9,7 +9,7 @@ public class DepthFirstDemo {
     public static void main(String[] args) {
         Maze maze = new Maze("lab11/graphs/maze.txt");
 
-        int startX = 1;
+        int startX = 2;
         int startY = 1;
         int targetX = maze.N();
         int targetY = maze.N();
