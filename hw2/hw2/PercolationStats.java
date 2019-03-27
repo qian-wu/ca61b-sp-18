@@ -3,12 +3,9 @@ package hw2;
 import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.introcs.StdStats;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PercolationStats {
     private double[] result;
-    private int N, T;
+    private double N, T;
 
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int N, int T, PercolationFactory pf) {
@@ -18,20 +15,20 @@ public class PercolationStats {
         T = T;
         result = new double[T];
 
-        for (int i = 0; i < T; i ++) {
+        for (int i = 0; i < T; i++) {
 //            System.out.println("Run test " + i);
             Percolation p = pf.make(N);
-            int fails = runTest(N, p);
-            result[i] =fails;
-//            System.out.println("Fails on " + fails);
+            double fails = runTest(N, p);
+            result[i] = fails / (N * N);
+//            System.out.println("Fails on " + fails / (N * N));
         }
     }
 
-    private int runTest(int N, Percolation p) {
-        int i = 0;
+    private double runTest(int size, Percolation p) {
+        double i = 0;
         while (!p.percolates()) {
-            int openRow = StdRandom.uniform(N);
-            int openCol = StdRandom.uniform(N);
+            int openRow = StdRandom.uniform(size);
+            int openCol = StdRandom.uniform(size);
             if (!p.isOpen(openRow, openCol)) {
                 p.open(openRow, openCol);
                 i += 1;
@@ -41,8 +38,8 @@ public class PercolationStats {
         return i;
     }
 
-    private void validate(int N, int T) {
-        if (N <= 0 || T <= 0) {
+    private void validate(int size, int round) {
+        if (size <= 0 || round <= 0) {
             throw new IllegalArgumentException();
         }
     }
@@ -71,10 +68,10 @@ public class PercolationStats {
         return mu + 1.96 * sigma / Math.sqrt(T);
     }
 
-//    public static void main(String[] args) {
-//        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
-//        System.out.println(s.mean());
-//        System.out.println(s.stddev());
-//    }
+    public static void main(String[] args) {
+        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
+        System.out.println(s.mean());
+        System.out.println(s.stddev());
+    }
 
 }

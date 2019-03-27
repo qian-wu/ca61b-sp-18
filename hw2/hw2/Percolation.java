@@ -13,6 +13,10 @@ public class Percolation {
     private int floor;
 
     public Percolation(int N) {  // create N-by-N grid, with all sites initially blocked
+        if (N <= 0) {
+            throw new IllegalArgumentException();
+        }
+
         sites = new boolean[N][N];
         this.N = N;
         ocean = N * N;
@@ -49,7 +53,9 @@ public class Percolation {
     public void open(int row, int col) {     // open the site (row, col) if it is not open already
         vlidateIndex(row, col);
 
-        if (isOpen(row, col)) return;
+        if (isOpen(row, col)) {
+            return;
+        }
 
         sites[row][col] = true;
 
@@ -107,7 +113,7 @@ public class Percolation {
     // check if passed position is validate
     private void vlidateIndex(int row, int col) {
         if (row < 0 || row >= N || col < 0 || col >= N) {
-            throw new IllegalArgumentException("index out of boundry");
+            throw new IndexOutOfBoundsException("index out of boundry");
         }
     }
 
