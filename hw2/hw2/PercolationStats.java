@@ -56,22 +56,18 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLow()      {
-        double mu = StdStats.mean(result);
-        double sigma = StdStats.stddev(result);
-        return mu - 1.96 * sigma / Math.sqrt(T);
+        return mean() - 1.96 * stddev() / Math.sqrt(T);
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHigh() {
-        double mu = StdStats.mean(result);
-        double sigma = StdStats.stddev(result);
-        return mu + 1.96 * sigma / Math.sqrt(T);
+        return mean() + 1.96 * stddev() / Math.sqrt(T);
     }
 
-    public static void main(String[] args) {
-        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
-        System.out.println(s.mean());
-        System.out.println(s.stddev());
-    }
+//    public static void main(String[] args) {
+//        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
+//        System.out.println(s.mean());
+//        System.out.println(s.stddev());
+//    }
 
 }
