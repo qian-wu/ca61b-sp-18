@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PercolationStats {
-    private int[] result;
+    private double[] result;
     private int N, T;
 
     // perform T independent experiments on an N-by-N grid
@@ -16,23 +16,26 @@ public class PercolationStats {
 
         N = N;
         T = T;
-        result = new int[T];
+        result = new double[T];
 
         for (int i = 0; i < T; i ++) {
+//            System.out.println("Run test " + i);
             Percolation p = pf.make(N);
             int fails = runTest(N, p);
             result[i] =fails;
+//            System.out.println("Fails on " + fails);
         }
     }
 
     private int runTest(int N, Percolation p) {
         int i = 0;
-        for (; i < N * N; i++) {
+        while (!p.percolates()) {
             int openRow = StdRandom.uniform(N);
             int openCol = StdRandom.uniform(N);
-
-            p.open(openRow, openCol);
-            if (p.percolates()) break;
+            if (!p.isOpen(openRow, openCol)) {
+                p.open(openRow, openCol);
+                i += 1;
+            }
         }
 
         return i;

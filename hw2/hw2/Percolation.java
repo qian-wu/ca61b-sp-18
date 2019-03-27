@@ -2,42 +2,32 @@ package hw2;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Percolation {
     private int openSize;
-    private Site[][] sites;
+    private boolean[][] sites;
     private boolean isPercolates;
     private int N;
-    private WeightedQuickUnionUF connectedSet;
+    private WeightedQuickUnionUF antiBackwash;
+    private WeightedQuickUnionUF uf;
     private int ocean;
-    private int[] floors;
-    private List<Site> openSiteList = new ArrayList<>();
+    private int floor;
 
     public Percolation(int N) {  // create N-by-N grid, with all sites initially blocked
-        sites = new Site[N][N];
-        openSize = 0;
+        sites = new boolean[N][N];
         this.N = N;
         ocean = N * N;
-        floors = new int[N];
-        connectedSet = new WeightedQuickUnionUF(N * N + N + 1);
+        floor = N * N + 1;
 
-        for (int i = 0; i < N; i++) {
-            floors[i] = N * N + 1 + i;
-        }
+        antiBackwash = new WeightedQuickUnionUF(N * N + 1);
+        uf = new WeightedQuickUnionUF(N * N + 2);
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                Site tmp = new Site();
-                sites[i][j] = tmp;
-
                 if (i == 0) {
-                    connectedSet.union(xyTo1D(i, j), ocean);
+                    antiBackwash.union(xyTo1D(i, j), ocean);
                 }
                 if (i == N - 1) {
-                    connectedSet.union(xyTo1D(i, j), floors[j]);
+                    uf.union(xyTo1D(i, j), floor);
 //                    System.out.println("union " + xyTo1D(i, j) + " " + floors[j]);
                 }
 
@@ -46,114 +36,71 @@ public class Percolation {
 
     }
 
+    private static class Neighbor {
+        int row;
+        int col;
+
+        Neighbor(int i, int j) {
+            row = i;
+            col = j;
+        }
+    }
+
     public void open(int row, int col) {     // open the site (row, col) if it is not open already
-        //union with all neighbors to one set
+        vlidateIndex(row, col);
+
+        if (isOpen(row, col)) return;
+
+        sites[row][col] = true;
+
         unionAllNeighbors(row, col);
         openSize += 1;
     }
 
 
     private void unionAllNeighbors(int row, int col) {
-        vlidateIndex(row, col);
-
-        Site curr = getSite(row, col);
-        curr.isOpen = true;
-
         int curr1D = xyTo1D(row, col);
-        curr.id = curr1D;
-        boolean beforeOpenState = curr.isFull;
 
-        //union up
-        if (row == 0) {
-            curr.isFull = true;
-        } else {
-            int upRow = row - 1;
-            if (isOpen(upRow, col)) {
-                int upNgb1D = xyTo1D(upRow, col);
-                connectedSet.union(curr1D, upNgb1D);
-                fillTo(upRow, col, row, col);
+        for (Neighbor n : getAllNeighbors(row, col)) {
+            if (n != null) {
+                int ngb1D = xyTo1D(n.row, n.col);
+                if (isOpen(n.row, n.col)) {
+                    antiBackwash.union(ngb1D, curr1D);
+                    uf.union(ngb1D, curr1D);
+                    if (antiBackwash.connected(ocean, ngb1D)) {
+                        uf.union(ocean, curr1D);
+                        antiBackwash.union(ocean, curr1D);
+                    }
+                }
             }
         }
+    }
 
-        //union below
+    private Neighbor[] getAllNeighbors(int row, int col) {
+        Neighbor[] tmp = new Neighbor[]{null, null, null, null};
+
+        int upRow = row - 1;
+        int blowRow = row + 1;
+        int leftCol = col - 1;
+        int rightCol = col + 1;
+
+        if (row > 0) {
+            tmp[0] = new Neighbor(upRow, col);
+        }
         if (row < N - 1) {
-            int blowRow = row + 1;
-            if (isOpen(blowRow, col)) {
-                int blowNgb1D = xyTo1D(blowRow, col);
-                connectedSet.union(curr1D, blowNgb1D);
-                fillTo(blowRow, col, row, col);
-            }
+            tmp[1] = new Neighbor(blowRow, col);
         }
-
-        //union left
         if (col > 0) {
-            int leftCol = col - 1;
-            if (isOpen(row, leftCol)) {
-                int leftNgb1D = xyTo1D(row, leftCol);
-                connectedSet.union(curr1D, leftNgb1D);
-                fillTo(row, leftCol, row, col);
-            }
+            tmp[2] = new Neighbor(row, leftCol);
         }
-
-        //union right
         if (col < N - 1) {
-            int rightCol = col + 1;
-            if (isOpen(row, rightCol)) {
-                int rightNgb1D = xyTo1D(row, rightCol);
-                connectedSet.union(curr1D, rightNgb1D);
-                fillTo(row, rightCol, row, col);
-            }
+            tmp[3] = new Neighbor(row, rightCol);
         }
 
-        //update union set if curr block is full
-        if (!beforeOpenState && isFull(row, col)) {
-            updateSetToFull(row, col);
-            isPercolates = checkPercolates(row, col);
-        }
-
-        openSiteList.add(curr);
-//        System.out.println("Open " + row + " " + col + ", on set " + connectedSet.find(curr1D));
+        return tmp;
     }
 
-    private void updateSetToFull(int row, int col) {
-        int setNumber = connectedSet.find(xyTo1D(row, col));
-//        System.out.println("update on : " + row + " " + col + ", set : " + setNumber);
-
-//        List removeSites = new ArrayList();
-        for (int i = 0; i < openSiteList.size(); i++) {
-            Site s = openSiteList.get(i);
-            if (connectedSet.find(s.id) == setNumber && s.isOpen && !s.isFull) {
-//                System.out.println("update " + i + " " + j);
-                s.isFull = true;
-//                removeSites.add(i);
-            }
-        }
-
-//        for (int j = 0; j < removeSites.size(); j++) {
-//            openSiteList.remove(j);
-//        }
-    }
-
-    private void fillTo(int fromRow, int fromCol, int toRow, int toCol) {
-        if (!isFull(toRow, toCol) && isFull(fromRow, fromCol)) {
-            getSite(toRow, toCol).isFull = getSite(fromRow, fromCol).isFull;
-        }
-    }
-
-    private boolean checkPercolates(int row, int col) {
-        int id = xyTo1D(row, col);
-
-        if (connectedSet.connected(id, ocean)) {
-            for (int i = 0; i < N; i++) {
-                if (connectedSet.connected(id, floors[i]))
-                    return true;
-            }
-        }
-
-        return  false;
-    }
-
-    private Site getSite(int row, int col) {
+    private boolean getSite(int row, int col) {
         return sites[row][col];
     }
 
@@ -165,11 +112,11 @@ public class Percolation {
     }
 
     public boolean isOpen(int row, int col) { // is the site (row, col) open?
-        return getSite(row, col).isOpen;
+        return sites[row][col];
     }
 
     public boolean isFull(int row, int col) { // is the site (row, col) full?
-        return getSite(row, col).isFull;
+        return isOpen(row, col) && antiBackwash.connected(xyTo1D(row, col), ocean);
     }
 
     public int numberOfOpenSites() {          // number of open sites
@@ -177,7 +124,7 @@ public class Percolation {
     }
 
     public boolean percolates() {             // does the system percolate?
-        return isPercolates;
+        return uf.connected(ocean, floor);
     }
 
     private int xyTo1D(int row, int col) {
