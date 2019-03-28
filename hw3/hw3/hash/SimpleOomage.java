@@ -34,7 +34,7 @@ public class SimpleOomage implements Oomage {
         if (!USE_PERFECT_HASH) {
             return red + green + blue;
         } else {
-            return Math.floorMod(red * 257 * 257 + green * 257 + blue, 257);
+            return Math.floorMod(red * 31 * 31 + green * 31 + blue, 251);
         }
     }
 
@@ -69,6 +69,9 @@ public class SimpleOomage implements Oomage {
         randomSimpleOomage().draw(0.75, 0.75, 1);
         randomSimpleOomage().draw(0.25, 0.75, 1);
         randomSimpleOomage().draw(0.75, 0.25, 1);
+
+        System.out.println(new SimpleOomage(0, 0, 0).hashCode());
+        System.out.println(new SimpleOomage(0, 5, 0).hashCode());
     }
 
     public String toString() {

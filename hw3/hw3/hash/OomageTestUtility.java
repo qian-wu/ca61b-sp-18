@@ -26,7 +26,7 @@ public class OomageTestUtility {
 
         int j = 0;
         for (int i: bucketSizes) {
-            System.out.println("bucket " + j + ": size " + i);
+//            System.out.println("bucket " + j + ": size " + i);
             if (i <= size / 50 || i >= size / 2.5) {
                 return false;
             }

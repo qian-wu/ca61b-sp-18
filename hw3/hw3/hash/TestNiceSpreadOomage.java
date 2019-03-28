@@ -40,6 +40,6 @@ public class TestNiceSpreadOomage {
             oomages.add(NiceSpreadOomage.randomNiceSpreadOomage());
         }
 
-        assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
+        assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 5));
     }
 }
