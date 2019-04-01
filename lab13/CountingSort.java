@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class with 2 ways of doing Counting sort, one naive way and one "better" way
  *
@@ -57,6 +60,13 @@ public class CountingSort {
         return sorted;
     }
 
+    private static int getKeyIndex(int a[], int key) {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == key) return i;
+        }
+        return -1;
+    }
+
     /**
      * Counting sort on the given int array, must work even with negative numbers.
      * Note, this code does not need to work for ranges of numbers greater
@@ -66,7 +76,42 @@ public class CountingSort {
      * @param arr int array that will be sorted
      */
     public static int[] betterCountingSort(int[] arr) {
-        // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        //get min and max
+        int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+        for (int i : arr) {
+            if (i < min) min = i;
+            if (i > max) max = i;
+        }
+
+        //count keys
+        int[] keys = new int[max - min + 1];
+
+        int start = min;
+        for (int i = 0; i < keys.length; i++) {
+            keys[i] = start++;
+        }
+
+        int[] values = new int[max - min + 1];
+
+        for (int i : arr) {
+            int keyIdx = getKeyIndex(keys, i);
+            values[keyIdx] += 1;
+        }
+
+        int[] count = new int[max - min + 1];
+        int[] aux = new int[arr.length];
+
+        //count rate
+        for (int i = 1; i < count.length; i++) {
+            count[i] = values[i - 1];
+            count[i] = count[i - 1] + count[i];
+        }
+        System.out.println();
+        //trans rate to index
+        for (int i = 0; i < aux.length; i++) {
+            aux[count[getKeyIndex(keys, arr[i])]++] = arr[i];
+        }
+
+        return aux;
     }
 }
