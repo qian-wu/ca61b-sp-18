@@ -16,6 +16,10 @@ public class RadixSort {
      * @return String[] the sorted array
      */
     public static String[] sort(String[] asciis) {
+        if (asciis.length < 2) {
+            return asciis;
+        }
+
         //get max length of arry strings
         int maxLength = 0;
         int[] lengths = new int[asciis.length];
@@ -108,12 +112,12 @@ public class RadixSort {
         return;
     }
 
-    public static void main(String[] args) {
-        String[] s = {"ab", "cba", "a", "cdb", "bbb", "1", "100"};
-        String[] x = RadixSort.sort(s);
-
-        for (String i: x) {
-            System.out.print(i + " ");
-        }
-    }
+//    public static void main(String[] args) {
+//        String[] s = {"ab", "cba", "a", "cdb", "bbb", "1", "100"};
+//        String[] x = RadixSort.sort(s);
+//
+//        for (String i: x) {
+//            System.out.print(i + " ");
+//        }
+//    }
 }
