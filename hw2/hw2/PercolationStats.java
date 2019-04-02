@@ -11,8 +11,8 @@ public class PercolationStats {
     public PercolationStats(int N, int T, PercolationFactory pf) {
         validate(N, T);
 
-        N = N;
-        T = T;
+        this.N = N;
+        this.T = T;
         result = new double[T];
 
         for (int i = 0; i < T; i++) {
@@ -68,6 +68,8 @@ public class PercolationStats {
 //        PercolationStats s = new PercolationStats(100, 90, new PercolationFactory());
 //        System.out.println(s.mean());
 //        System.out.println(s.stddev());
+//        System.out.println(s.confidenceLow());
+//        System.out.println(s.confidenceHigh());
 //    }
 
 }
