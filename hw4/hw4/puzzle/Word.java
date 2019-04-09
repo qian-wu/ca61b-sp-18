@@ -10,6 +10,37 @@ public class Word implements WorldState {
     private static final String WORDFILE = "input/words10000.txt";
     private final String word;
     private final String goal;
+    private WorldState prev;
+    private int moves = 0;
+    private boolean visited = false;
+
+    public void setBeVisited() {
+        visited = true;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setMoves(int n) {
+        moves = n;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public int allDist() {
+        return estimatedDistanceToGoal() + moves;
+    }
+
+    public void setPrev(WorldState word) {
+        prev = word;
+    }
+
+    public WorldState getPrev() {
+        return prev;
+    }
 
     /**
      * Reads the wordfile specified by the wordfile variable.
@@ -48,7 +79,7 @@ public class Word implements WorldState {
      * Computes the edit distance between a and b. From
      * https://rosettacode.org/wiki/Levenshtein_distance.
      */
-    private static int editDistance(String a, String b) {
+    public static int editDistance(String a, String b) {
         a = a.toLowerCase();
         b = b.toLowerCase();
         // i == 0
@@ -115,4 +146,13 @@ public class Word implements WorldState {
         result = 31 * result + (goal != null ? goal.hashCode() : 0);
         return result;
     }
+
+    public static void main(String[] args) {
+        Word w = new Word("worse", "nurse");
+        String s = "nurse";
+        for (WorldState a : w.neighbors()) {
+            System.out.println(a + " dis to " + s + " is " + Word.editDistance("nurse", a.toString()));
+        }
+    }
+
 }
