@@ -4,42 +4,99 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Solver {
-    private int moveTimes = 0;
+    private static Map<String, Integer> distMap = new HashMap<>();
+
+    private class Node implements Comparable<Node>{
+        private WorldState ws;
+        private int times;
+        private Node prev;
+
+        Node(WorldState ws, int times, Node prev) {
+            this.ws = ws;
+            this.times = times;
+            this.prev = prev;
+        }
+
+        boolean isGoal() {
+            return ws.isGoal();
+        }
+
+        Iterable<Node> neighbors() {
+            Set<Node> neighbors = new HashSet<>();
+            for (WorldState w : ws.neighbors()) {
+                neighbors.add(new Node(w, this.times + 1, this));
+            }
+            return neighbors;
+        }
+
+        public int getTimes() {
+            return times;
+        }
+
+        public Node getPrev() {
+            return prev;
+        }
+
+        public int getPiri() {
+            int distToGoal = 0;
+            if (distMap.containsKey(ws.toString())) {
+                distToGoal = distMap.get(ws.toString());
+//                System.out.println("hit " + ws.toString());
+            } else {
+                distToGoal = ws.estimatedDistanceToGoal();
+                distMap.put(ws.toString(), distToGoal);
+            }
+            return times + distToGoal;
+        }
+
+        public WorldState getWorld() {
+            return ws;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.getPiri() - o.getPiri();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            WorldState w2 = ((Node) obj).getWorld();
+            return ws.equals(w2);
+        }
+    }
+
     private Stack<WorldState> s;
-    private MinPQ<WorldState> mp;
-    private Set<WorldState> wordSet;
+    private MinPQ<Node> mp;
+    private int moveTimes;
 
     public Solver(WorldState initial) {
-        mp = new MinPQ<>(8, new WordComparator());
+        mp = new MinPQ<>();
         s = new Stack<>();
-        mp.insert(initial);
-        Word curr = (Word) initial;
+
+        Node curr = new Node(initial, 0, null);
+        mp.insert(curr);
 
         while (!mp.isEmpty()) {
-            curr = (Word) mp.delMin();
-            System.out.println(curr);
+            curr = mp.delMin();
+//            System.out.println(curr.getWorld());
             if (curr.isGoal()) {
                 break;
             }
-            for (WorldState word : curr.neighbors()) {
-                Word w = (Word) word;
-                if (curr.getPrev() == null || curr.getPrev() != null && !w.equals(curr.getPrev())) {
-                    w.setPrev(curr);
-                    w.setMoves(curr.getMoves() + 1);
-                    mp.insert(word);
+            for (Node node : curr.neighbors()) {
+                if (curr.getPrev() == null || curr.getPrev() != null && !node.equals(curr.getPrev())) {
+                    mp.insert(node);
                 }
             }
 
         }
 
-        moveTimes = curr.getMoves();
+        moveTimes = curr.getTimes();
         while (curr != null) {
-            s.push(curr);
-            curr = (Word) curr.getPrev();
+            s.push(curr.getWorld());
+            curr = curr.getPrev();
         }
     }
 

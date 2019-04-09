@@ -14,14 +14,6 @@ public class Word implements WorldState {
     private int moves = 0;
     private boolean visited = false;
 
-    public void setBeVisited() {
-        visited = true;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
     public void setMoves(int n) {
         moves = n;
     }

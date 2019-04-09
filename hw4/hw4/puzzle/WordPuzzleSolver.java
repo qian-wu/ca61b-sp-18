@@ -14,7 +14,7 @@ public class WordPuzzleSolver {
 
         Solver solver = new Solver(startState);
 
-        StdOut.println("Minimum number of moves = " + solver.moves());
+        StdOut.println("Minimum nrumber of moves = " + solver.moves());
         for (WorldState ws : solver.solution()) {
             StdOut.println(ws);
         }
