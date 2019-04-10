@@ -11,6 +11,7 @@ public class Board implements WorldState {
     private int rowBlank;
     private int colBlank;
     private int m = 0;
+    private int h = 0;
 
     public Board(int[][] tiles) {
         this.size = tiles[0].length;
@@ -21,6 +22,7 @@ public class Board implements WorldState {
 //            this.goal = goalTiles(size);
 //        }
 
+        int goal = 1;
         for (int i = 0; i < size; i++) {
             System.arraycopy(tiles[i], 0, this.tiles[i], 0, size);
             for (int j = 0; j < size; j++) {
@@ -28,10 +30,17 @@ public class Board implements WorldState {
                     rowBlank = i;
                     colBlank = j;
                 }
-                int value = tileAt(i, j) - 1;
-                if (value < 0) {
-                    m += Math.abs(i - size + 1) + Math.abs(j - size + 1);
-                } else {
+                //compute h
+                if (goal != size * size) {
+                    if (tiles[i][j] != goal++) {
+                        h += 1;
+                    }
+                }
+
+                //compute m
+                if (tiles[i][j] != 0) {
+                    int value = tiles[i][j] - 1;
+
                     int rowGol = value / size();
                     int colGol = value % size();
                     m += Math.abs(rowGol - i) + Math.abs(colGol - j);
@@ -99,16 +108,7 @@ public class Board implements WorldState {
     }
 
     public int hamming() {
-        int n = 0;
-
-//        for (int i = 0; i < size; i++) {
-//            for (int j = 0; j < size; j++) {
-//                if (tiles[i][j] != goal[i][j]) {
-//                    n += 1;
-//                }
-//            }
-//        }
-        return n;
+        return h;
     }
 
     public int manhattan() {
@@ -161,21 +161,22 @@ public class Board implements WorldState {
         return result;
     }
 
-//    public static void main(String[] args) {
-//        int[][] t = new int[3][3];
-//        int n = 1;
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                t[i][j] = n++;
-//            }
-//        }
-//        t[1][0] = 0;
-//        Board b = new Board(t);
-//
-//        System.out.println(b);
-//        for (WorldState ws : b.neighbors()) {
-//            System.out.println(ws);
-//            System.out.println("dist : " + ws.estimatedDistanceToGoal());
-//        }
-//    }
+    public static void main(String[] args) {
+        int[][] t = new int[3][3];
+        int n = 1;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                t[i][j] = n++;
+            }
+        }
+        t[2][2] = t[1][0];
+        t[1][0] = 0;
+        Board b = new Board(t);
+
+        System.out.println(b);
+        for (WorldState ws : b.neighbors()) {
+            System.out.println(ws);
+            System.out.println("dist : " + ws.estimatedDistanceToGoal());
+        }
+    }
 }
