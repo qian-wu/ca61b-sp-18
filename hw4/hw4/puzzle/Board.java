@@ -24,8 +24,10 @@ public class Board implements WorldState {
 
         int goal = 1;
         for (int i = 0; i < size; i++) {
-            System.arraycopy(tiles[i], 0, this.tiles[i], 0, size);
+//            System.arraycopy(tiles[i], 0, this.tiles[i], 0, size);
             for (int j = 0; j < size; j++) {
+                this.tiles[i][j] = tiles[i][j];
+
                 if(tiles[i][j] ==0) {
                     rowBlank = i;
                     colBlank = j;
@@ -41,9 +43,7 @@ public class Board implements WorldState {
                 if (tiles[i][j] != 0) {
                     int value = tiles[i][j] - 1;
 
-                    int rowGol = value / size();
-                    int colGol = value % size();
-                    m += Math.abs(rowGol - i) + Math.abs(colGol - j);
+                    m += Math.abs(value / size - i) + Math.abs(value % size - j);
                 }
             }
         }
@@ -161,22 +161,22 @@ public class Board implements WorldState {
         return result;
     }
 
-    public static void main(String[] args) {
-        int[][] t = new int[3][3];
-        int n = 1;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                t[i][j] = n++;
-            }
-        }
-        t[2][2] = t[1][0];
-        t[1][0] = 0;
-        Board b = new Board(t);
-
-        System.out.println(b);
-        for (WorldState ws : b.neighbors()) {
-            System.out.println(ws);
-            System.out.println("dist : " + ws.estimatedDistanceToGoal());
-        }
-    }
+//    public static void main(String[] args) {
+//        int[][] t = new int[3][3];
+//        int n = 1;
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                t[i][j] = n++;
+//            }
+//        }
+//        t[2][2] = t[1][0];
+//        t[1][0] = 0;
+//        Board b = new Board(t);
+//
+//        System.out.println(b);
+//        for (WorldState ws : b.neighbors()) {
+//            System.out.println(ws);
+//            System.out.println("dist : " + ws.estimatedDistanceToGoal());
+//        }
+//    }
 }
