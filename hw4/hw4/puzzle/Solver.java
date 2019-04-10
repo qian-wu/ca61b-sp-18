@@ -98,13 +98,16 @@ public class Solver {
             s.push(curr.getWorld());
             curr = curr.getPrev();
         }
+        mp = null;
     }
 
     public int moves() {
+
         return moveTimes;
     }
 
     public Iterable<WorldState> solution() {
+
         return s;
     }
 }

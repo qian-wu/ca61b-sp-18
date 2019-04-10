@@ -1,25 +1,40 @@
 package hw4.puzzle;
 
-import java.util.HashSet;
-import java.util.Set;
+import edu.princeton.cs.algs4.Queue;
+
+import java.util.*;
 
 public class Board implements WorldState {
     private int[][] tiles;
     private int size;
-    private int[][] goal;
+//    private static int[][] goal;
     private int rowBlank;
     private int colBlank;
+    private int m = 0;
 
     public Board(int[][] tiles) {
-        this.tiles = tiles;
         this.size = tiles[0].length;
-        this.goal = goalTiles(size);
+        this.tiles = new int[size][size];
+
+//        if (goal == null) {
+//            System.out.println("get goal tiles");
+//            this.goal = goalTiles(size);
+//        }
 
         for (int i = 0; i < size; i++) {
+            System.arraycopy(tiles[i], 0, this.tiles[i], 0, size);
             for (int j = 0; j < size; j++) {
                 if(tiles[i][j] ==0) {
                     rowBlank = i;
                     colBlank = j;
+                }
+                int value = tileAt(i, j) - 1;
+                if (value < 0) {
+                    m += Math.abs(i - size + 1) + Math.abs(j - size + 1);
+                } else {
+                    int rowGol = value / size();
+                    int colGol = value % size();
+                    m += Math.abs(rowGol - i) + Math.abs(colGol - j);
                 }
             }
         }
@@ -38,7 +53,7 @@ public class Board implements WorldState {
     }
 
     public int tileAt(int i, int j) {
-        if (i < 0 || i >= size() || j < 0 || j >= size()) {
+        if (i < 0 || i >= size || j < 0 || j >= size) {
             throw new IndexOutOfBoundsException("Tial position out of boundry");
         }
         return tiles[i][j];
@@ -49,75 +64,74 @@ public class Board implements WorldState {
     }
 
     public Iterable<WorldState> neighbors() {
-        Set<WorldState> neighbors = new HashSet<>();
+        Queue<WorldState> neighbors = new Queue<>();
 
         // up blank
-        if (rowBlank > 0) {
-            neighbors.add(exchangeBlank(rowBlank - 1, colBlank));
+        if (rowBlank != 0) {
+            neighbors.enqueue(exchangeBlank(rowBlank - 1, colBlank));
         }
         // blow blank
-        if (rowBlank < size() - 1) {
-            neighbors.add(exchangeBlank(rowBlank + 1, colBlank));
+        if (rowBlank != size - 1) {
+            neighbors.enqueue(exchangeBlank(rowBlank + 1, colBlank));
         }
         // left blank
-        if (colBlank > 0) {
-            neighbors.add(exchangeBlank(rowBlank, colBlank - 1));
+        if (colBlank != 0) {
+            neighbors.enqueue(exchangeBlank(rowBlank, colBlank - 1));
         }
         // right blank
-        if (colBlank < size() - 1) {
-            neighbors.add(exchangeBlank(rowBlank, colBlank + 1));
+        if (colBlank != size - 1) {
+            neighbors.enqueue(exchangeBlank(rowBlank, colBlank + 1));
         }
         return neighbors;
     }
 
     public Board exchangeBlank(int r2, int c2) {
-        int[][] target = new int[size()][size()];
-        for (int i = 0; i < size(); i++) {
-            System.arraycopy(tiles[i], 0, target[i], 0, size());
-        }
+        tiles[rowBlank][colBlank] = tiles[r2][c2];
+        tiles[r2][c2] = 0;
 
-        int tmp = target[rowBlank][colBlank];
-        target[rowBlank][colBlank] = target[r2][c2];
-        target[r2][c2] = tmp;
+        Board b = new Board(tiles);
 
-        return new Board(target);
+        tiles[r2][c2] = tiles[rowBlank][colBlank];
+        tiles[rowBlank][colBlank] = 0;
+
+
+        return b;
     }
 
     public int hamming() {
         int n = 0;
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (tiles[i][j] != goal[i][j]) {
-                    n += 1;
-                }
-            }
-        }
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                if (tiles[i][j] != goal[i][j]) {
+//                    n += 1;
+//                }
+//            }
+//        }
         return n;
     }
 
     public int manhattan() {
-        return 0;
+        return m;
     }
 
     public int estimatedDistanceToGoal() {
-        return hamming();
+        return m;
     }
 
     public boolean equals(Object y) {
-        if (y == null) {
-            return false;
-        }
-        if ( y != null && getClass() != y.getClass()) {
-            return false;
-        }
+//        System.out.println("called equals");
+//        if (y == null) {
+//            return false;
+//        }
+//        if ( y != null && getClass() != y.getClass()) {
+//            return false;
+//        }
 
         Board b = (Board) y;
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (tileAt(i, j) != b.tileAt(i, j)) {
-                    return false;
-                }
+            if (!Arrays.equals(b.tiles[i], this.tiles[i])) {
+                return false;
             }
         }
         return true;
@@ -140,21 +154,28 @@ public class Board implements WorldState {
         return s.toString();
     }
 
-    public static void main(String[] args) {
-        int[][] t = new int[3][3];
-        int n = 1;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                t[i][j] = n++;
-            }
-        }
-        t[1][0] = 0;
-        Board b = new Board(t);
-
-        System.out.println(b);
-        for (WorldState ws : b.neighbors()) {
-            System.out.println(ws);
-            System.out.println("dist : " + ws.estimatedDistanceToGoal());
-        }
+    @Override
+    public int hashCode() {
+        int result = tiles != null ? tiles.hashCode() : 0;
+        result = result * 31;
+        return result;
     }
+
+//    public static void main(String[] args) {
+//        int[][] t = new int[3][3];
+//        int n = 1;
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                t[i][j] = n++;
+//            }
+//        }
+//        t[1][0] = 0;
+//        Board b = new Board(t);
+//
+//        System.out.println(b);
+//        for (WorldState ws : b.neighbors()) {
+//            System.out.println(ws);
+//            System.out.println("dist : " + ws.estimatedDistanceToGoal());
+//        }
+//    }
 }
