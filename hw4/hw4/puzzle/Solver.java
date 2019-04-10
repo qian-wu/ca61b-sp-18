@@ -41,14 +41,14 @@ public class Solver {
         }
 
         public int getPiri() {
-            int distToGoal = 0;
-            if (distMap.containsKey(ws.toString())) {
-                distToGoal = distMap.get(ws.toString());
-//                System.out.println("hit " + ws.toString());
-            } else {
-                distToGoal = ws.estimatedDistanceToGoal();
-                distMap.put(ws.toString(), distToGoal);
-            }
+            int distToGoal = ws.estimatedDistanceToGoal();
+//            if (distMap.containsKey(ws.toString())) {
+//                distToGoal = distMap.get(ws.toString());
+////                System.out.println("hit " + ws.toString());
+//            } else {
+//                distToGoal = ws.estimatedDistanceToGoal();
+//                distMap.put(ws.toString(), distToGoal);
+//            }
             return times + distToGoal;
         }
 
