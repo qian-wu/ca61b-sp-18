@@ -4,12 +4,16 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class Solver {
     private static Map<String, Integer> distMap = new HashMap<>();
 
-    private class Node implements Comparable<Node>{
+    private class Node implements Comparable<Node> {
         private WorldState ws;
         private int times;
         private Node prev;
@@ -25,7 +29,7 @@ public class Solver {
         }
 
         Iterable<Node> neighbors() {
-            Set<Node> neighbors = new HashSet<>();
+            List<Node> neighbors = new ArrayList<>();
             for (WorldState w : ws.neighbors()) {
                 neighbors.add(new Node(w, this.times + 1, this));
             }
@@ -66,6 +70,11 @@ public class Solver {
             WorldState w2 = ((Node) obj).getWorld();
             return ws.equals(w2);
         }
+
+        @Override
+        public int hashCode() {
+            return ws.hashCode();
+        }
     }
 
     private Stack<WorldState> s;
@@ -86,7 +95,8 @@ public class Solver {
                 break;
             }
             for (Node node : curr.neighbors()) {
-                if (curr.getPrev() == null || curr.getPrev() != null && !node.equals(curr.getPrev())) {
+                if (curr.getPrev() == null || curr.getPrev() != null
+                        && !node.equals(curr.getPrev())) {
                     mp.insert(node);
                 }
             }

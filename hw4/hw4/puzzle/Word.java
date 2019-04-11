@@ -26,8 +26,8 @@ public class Word implements WorldState {
         return estimatedDistanceToGoal() + moves;
     }
 
-    public void setPrev(WorldState word) {
-        prev = word;
+    public void setPrev(WorldState ws) {
+        prev = ws;
     }
 
     public WorldState getPrev() {
@@ -143,7 +143,8 @@ public class Word implements WorldState {
         Word w = new Word("worse", "nurse");
         String s = "nurse";
         for (WorldState a : w.neighbors()) {
-            System.out.println(a + " dis to " + s + " is " + Word.editDistance("nurse", a.toString()));
+            System.out.println(a + " dis to " + s + " is "
+                    + Word.editDistance("nurse", a.toString()));
         }
     }
 

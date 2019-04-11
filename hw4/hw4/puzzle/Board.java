@@ -2,7 +2,8 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.Queue;
 
-import java.util.*;
+import java.util.Arrays;
+
 
 public class Board implements WorldState {
     private int[][] tiles;
@@ -28,7 +29,7 @@ public class Board implements WorldState {
             for (int j = 0; j < size; j++) {
                 this.tiles[i][j] = tiles[i][j];
 
-                if(tiles[i][j] ==0) {
+                if (tiles[i][j] == 0) {
                     rowBlank = i;
                     colBlank = j;
                 }
@@ -49,15 +50,15 @@ public class Board implements WorldState {
         }
     }
 
-    private int[][] goalTiles(int size) {
+    private int[][] goalTiles(int tileSize) {
         int n = 1;
-        int[][] g = new int[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        int[][] g = new int[tileSize][tileSize];
+        for (int i = 0; i < tileSize; i++) {
+            for (int j = 0; j < tileSize; j++) {
                 g[i][j] = n++;
             }
         }
-        g[size - 1][size - 1] = 0;
+        g[tileSize - 1][tileSize - 1] = 0;
         return g;
     }
 
@@ -94,7 +95,7 @@ public class Board implements WorldState {
         return neighbors;
     }
 
-    public Board exchangeBlank(int r2, int c2) {
+    private Board exchangeBlank(int r2, int c2) {
         tiles[rowBlank][colBlank] = tiles[r2][c2];
         tiles[r2][c2] = 0;
 
@@ -121,12 +122,12 @@ public class Board implements WorldState {
 
     public boolean equals(Object y) {
 //        System.out.println("called equals");
-//        if (y == null) {
-//            return false;
-//        }
-//        if ( y != null && getClass() != y.getClass()) {
-//            return false;
-//        }
+        if (y == null) {
+            return false;
+        }
+        if ( y != null && getClass() != y.getClass()) {
+            return false;
+        }
 
         Board b = (Board) y;
         for (int i = 0; i < size; i++) {
@@ -146,7 +147,7 @@ public class Board implements WorldState {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
