@@ -125,7 +125,7 @@ public class Board implements WorldState {
         if (y == null) {
             return false;
         }
-        if ( y != null && getClass() != y.getClass()) {
+        if (y != null && getClass() != y.getClass()) {
             return false;
         }
 
